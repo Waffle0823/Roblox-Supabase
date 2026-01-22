@@ -32,11 +32,10 @@ Fixes #
 
 ## Checklist
 <!-- Mark the following with an 'x' (no spaces - '[x]') -->
-- [ ] My code follows the style guidelines of this project
+- [ ] My code follows the style and conventions of this project
 - [ ] I have performed a self-review of my own code
-- [ ] I have commented my code, particularly in hard-to-understand areas
-- [ ] I have made corresponding changes to the documentation
-- [ ] My changes generate no new warnings
-- [ ] New and existing tests pass locally with my changes
-- [ ] Any dependent changes have been merged and published in downstream modules
-- [ ] I have checked my code and corrected any misspellings
+- [ ] I have commented my code in hard-to-understand areas
+- [ ] I have updated the documentation (if applicable)
+- [ ] My changes introduce no new TypeScript errors or warnings
+- [ ] Tests have been added or updated (if applicable)
+- [ ] I have checked my code for obvious mistakes and typos
