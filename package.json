@@ -1,7 +1,7 @@
 {
   "name": "@rbxts/roblox-supabase",
   "version": "1.0.0",
-  "description": "",
+  "description": "A type-safe PostgREST client for Supabase, designed for Roblox servers using roblox-ts",
   "main": "out/init.lua",
   "scripts": {
     "build": "rbxtsc",
@@ -12,8 +12,8 @@
     "type": "git",
     "url": "git+https://github.com/Waffle0823/Roblox-Supabase.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["roblox", "supabase", "postgrest", "typescript", "client", "roblox-ts", "rbxts", "type"],
+  "author": "Waffle0823",
   "license": "MIT",
   "type": "commonjs",
   "bugs": {
