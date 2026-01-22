@@ -42,7 +42,7 @@
     "@rbxts/types": "^1.0.903",
     "@typescript-eslint/eslint-plugin": "^8.53.1",
     "@typescript-eslint/parser": "^8.53.1",
-    "eslint": "^9.39.2",
+    "eslint": "^8.57.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
     "eslint-plugin-roblox-ts": "^1.3.1",
