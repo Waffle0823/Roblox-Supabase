@@ -1,5 +1,5 @@
 import { HttpService } from "@rbxts/services";
-import { SupabaseResponse } from "./Types";
+import { SupabaseResponse } from "./types/client";
 
 export default class SupabaseRequest {
 	private baseUrl: string;
