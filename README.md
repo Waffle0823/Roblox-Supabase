@@ -169,6 +169,8 @@ See the [open issues](https://github.com/Waffle0823/Roblox-Supabase/issues) for 
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, development process, and guidelines for submitting pull requests.
+
 If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
 Don't forget to give the project a star! Thanks again!
 
