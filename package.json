@@ -4,6 +4,7 @@
   "description": "A type-safe PostgREST client for Supabase, designed for Roblox servers using roblox-ts",
   "main": "out/init.lua",
   "scripts": {
+    "lint": "eslint src",
     "build": "rbxtsc",
     "watch": "rbxtsc -w",
     "prepublishOnly": "npm run build"
