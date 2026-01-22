@@ -72,8 +72,6 @@ Key features:
 * Simple API for making requests to your Supabase backend
 * Handles authentication and request formatting
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 ### Built With
@@ -81,8 +79,6 @@ Key features:
 * [![TypeScript][TypeScript.org]][TypeScript-url]
 * [![Roblox-TS][Roblox-TS.org]][Roblox-TS-url]
 * [![Supabase][Supabase.com]][Supabase-url]
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
@@ -117,8 +113,6 @@ To start using Roblox-Supabase in your Roblox project, follow these steps:
    const supabase = new SupabaseClient("YOUR_SUPABASE_URL", "YOUR_SUPABASE_ANON_KEY");
    ```
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- USAGE EXAMPLES -->
@@ -142,8 +136,6 @@ const result = await supabase
 
 _More examples and detailed documentation coming soon._
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- ROADMAP -->
@@ -159,8 +151,6 @@ _More examples and detailed documentation coming soon._
 - [ ] Code examples
 
 See the [open issues](https://github.com/Waffle0823/Roblox-Supabase/issues) for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
@@ -186,16 +176,12 @@ Don't forget to give the project a star! Thanks again!
   <img src="https://contrib.rocks/image?repo=Waffle0823/Roblox-Supabase" alt="contrib.rocks image" />
 </a>
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- LICENSE -->
 ## License
 
 Distributed under the MIT License. See `LICENSE` for more information.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
@@ -205,8 +191,6 @@ Distributed under the MIT License. See `LICENSE` for more information.
 Waffle0823 - csshin9928@gmail.com
 
 Project Link: [https://github.com/Waffle0823/Roblox-Supabase](https://github.com/Waffle0823/Roblox-Supabase)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
@@ -218,8 +202,6 @@ Project Link: [https://github.com/Waffle0823/Roblox-Supabase](https://github.com
 * [TypeScript Documentation](https://www.typescriptlang.org/docs/)
 * [Roblox Developer Hub](https://developer.roblox.com/)
 * [PostgREST Documentation](https://postgrest.org/)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
