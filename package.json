@@ -12,7 +12,16 @@
     "type": "git",
     "url": "git+https://github.com/Waffle0823/Roblox-Supabase.git"
   },
-  "keywords": ["roblox", "supabase", "postgrest", "typescript", "client", "roblox-ts", "rbxts", "type"],
+  "keywords": [
+    "roblox",
+    "supabase",
+    "postgrest",
+    "typescript",
+    "client",
+    "roblox-ts",
+    "rbxts",
+    "type"
+  ],
   "author": "Waffle0823",
   "license": "MIT",
   "type": "commonjs",
@@ -40,5 +49,8 @@
     "prettier": "^3.8.1",
     "roblox-ts": "^3.0.0",
     "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@rbxts/services": "^1.6.0"
   }
 }
