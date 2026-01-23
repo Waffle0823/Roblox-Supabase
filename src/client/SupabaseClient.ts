@@ -1,4 +1,3 @@
-import SupabaseRequest from "../request/SupabaseRequest";
 import { SupabaseClientOptions } from "./types/client";
 import { DatabaseWithoutInternals, GenericSchema, Headers } from "./types/common";
 
@@ -12,7 +11,6 @@ export default class SupabaseClient<
 > {
 	private baseUrl: string;
 	private anonKey: Secret;
-	private rest: SupabaseRequest;
 	private headers: Headers;
 	private schema: string;
 
@@ -26,7 +24,6 @@ export default class SupabaseClient<
 
 		this.baseUrl = baseUrl;
 		this.anonKey = anonKey;
-		this.rest = new SupabaseRequest(baseUrl + "rest/v1/", anonKey);
 		this.headers = {
 			"Content-Type": "application/json",
 			apikey: anonKey,
