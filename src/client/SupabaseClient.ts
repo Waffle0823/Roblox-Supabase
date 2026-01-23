@@ -1,4 +1,5 @@
 import SupabaseRequest from "../request/SupabaseRequest";
+import { SupabaseClientOptions } from "./types/client";
 import { GenericSchema } from "./types/common";
 
 export default class SupabaseClient<
@@ -16,7 +17,7 @@ export default class SupabaseClient<
 	private rest: SupabaseRequest;
 	private headers: Record<string, unknown>;
 
-	constructor(baseUrl: string, anonKey: Secret) {
+	constructor(baseUrl: string, anonKey: Secret, options: SupabaseClientOptions<SchemaName>) {
 		assert(baseUrl, "baseUrl is required");
 		assert(anonKey, "anonKey is required");
 
