@@ -41,4 +41,20 @@ export default class SupabaseClient<
 
 		return new QueryBuilder<Table>(this.baseUrl, this.headers, this.schema);
 	}
+
+	public insert<TableName extends string & keyof Schema["Tables"]>(relation: TableName) {
+		// TODO: implement insert
+	}
+
+	public update<TableName extends string & keyof Schema["Tables"]>(relation: TableName) {
+		// TODO: implement update
+	}
+
+	public upsert<TableName extends string & keyof Schema["Tables"]>(relation: TableName) {
+		// TODO: implement upsert
+	}
+
+	public delete<TableName extends string & keyof Schema["Tables"]>(relation: TableName) {
+		// TODO: implement delete
+	}
 }
