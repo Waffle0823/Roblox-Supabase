@@ -13,7 +13,6 @@ export default class SupabaseClient<
 	private baseUrl: string;
 	private anonKey: Secret;
 	private headers: Headers;
-	private schema: string;
 
 	constructor(baseUrl: string, anonKey: Secret, options: SupabaseClientOptions<SchemaName>) {
 		assert(baseUrl, "baseUrl is required");
@@ -23,13 +22,17 @@ export default class SupabaseClient<
 			baseUrl += "/";
 		}
 
-		this.baseUrl = baseUrl;
+		this.baseUrl = baseUrl + "rest/v1/";
 		this.anonKey = anonKey;
 		this.headers = {
 			"Content-Type": "application/json",
 			apikey: anonKey,
 		};
-		this.schema = options.db?.schema ?? "public";
+
+		const schema = options.db?.schema;
+		if (schema !== undefined && schema.size() > 0 && schema !== "public") {
+			this.headers.Prefer = "schema=" + schema;
+		}
 	}
 
 	public from<TableName extends string & keyof Schema["Tables"], Table extends Schema["Tables"][TableName]>(
@@ -39,22 +42,6 @@ export default class SupabaseClient<
 			error("Invalid relation name: relation cannot be empty");
 		}
 
-		return new QueryBuilder<Table>(this.baseUrl, this.headers, this.schema);
-	}
-
-	public insert<TableName extends string & keyof Schema["Tables"]>(relation: TableName) {
-		// TODO: implement insert
-	}
-
-	public update<TableName extends string & keyof Schema["Tables"]>(relation: TableName) {
-		// TODO: implement update
-	}
-
-	public upsert<TableName extends string & keyof Schema["Tables"]>(relation: TableName) {
-		// TODO: implement upsert
-	}
-
-	public delete<TableName extends string & keyof Schema["Tables"]>(relation: TableName) {
-		// TODO: implement delete
+		return new QueryBuilder<Table>(this.baseUrl + relation + "/", this.headers);
 	}
 }
