@@ -1,7 +1,3 @@
-export type ClientServerOptions = {
-	PostgrestVersion?: string;
-};
-
 export type GenericRelationship = {
 	foreignKeyName: string;
 	columns: string[];

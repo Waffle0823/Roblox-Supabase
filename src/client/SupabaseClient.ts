@@ -1,13 +1,8 @@
 import SupabaseRequest from "../request/SupabaseRequest";
-import { GenericSchema, ClientServerOptions } from "./types/common";
+import { GenericSchema } from "./types/common";
 
 export default class SupabaseClient<
 	Database extends Record<string, GenericSchema>,
-	ClientOptions extends ClientServerOptions = Database extends {
-		__InternalSupabase: infer I extends ClientServerOptions;
-	}
-		? I
-		: object,
 	SchemaName extends string & keyof Omit<Database, "__InternalSupabase"> = "public" extends keyof Omit<
 		Database,
 		"__InternalSupabase"
