@@ -2,20 +2,10 @@ import { HttpService } from "@rbxts/services";
 import { SupabaseResponse } from "./types/client";
 
 export default class SupabaseRequest {
-	private baseUrl: string;
-	private anonKey: Secret;
-
-	constructor(baseUrl: string, anonKey: Secret) {
-		assert(baseUrl, "baseUrl is required");
-		assert(anonKey, "anonKey is required");
-
-		if (baseUrl.sub(-1) !== "/") {
-			baseUrl += "/";
-		}
-
-		this.baseUrl = baseUrl;
-		this.anonKey = anonKey;
-	}
+	constructor(
+		private baseUrl: string,
+		private anonKey: Secret,
+	) {}
 
 	public async request<T = unknown>(params: {
 		method: "GET" | "HEAD" | "POST" | "PUT" | "DELETE" | "PATCH";
