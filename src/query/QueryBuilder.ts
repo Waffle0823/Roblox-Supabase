@@ -1,10 +1,13 @@
 import { Headers, GenericTable } from "../client/types/common";
+import SupabaseRequest from "../request/SupabaseRequest";
 import { Count } from "./types/common";
 
 export default class QueryBuilder<Table extends GenericTable> {
 	constructor(
-		private url: string,
+		private rest: SupabaseRequest,
 		private headers: Headers = {},
+		private relation: string,
+		private schema?: string,
 	) {}
 
 	public select(

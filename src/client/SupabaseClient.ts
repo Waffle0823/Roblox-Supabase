@@ -1,6 +1,7 @@
 import QueryBuilder from "../query/QueryBuilder";
+import SupabaseRequest from "../request/SupabaseRequest";
 import { SupabaseClientOptions } from "./types/client";
-import { DatabaseWithoutInternals, GenericSchema, Headers } from "./types/common";
+import { DatabaseWithoutInternals, GenericSchema } from "./types/common";
 
 export default class SupabaseClient<
 	Database extends Record<string, unknown>,
@@ -10,9 +11,8 @@ export default class SupabaseClient<
 			: string & keyof DatabaseWithoutInternals<Database>,
 	Schema extends GenericSchema = DatabaseWithoutInternals<Database>[SchemaName],
 > {
-	private baseUrl: string;
-	private anonKey: Secret;
-	private headers: Headers;
+	private rest: SupabaseRequest;
+	private options: SupabaseClientOptions<SchemaName> = {};
 
 	constructor(baseUrl: string, anonKey: Secret, options: SupabaseClientOptions<SchemaName>) {
 		assert(baseUrl, "baseUrl is required");
@@ -22,17 +22,8 @@ export default class SupabaseClient<
 			baseUrl += "/";
 		}
 
-		this.baseUrl = baseUrl + "rest/v1/";
-		this.anonKey = anonKey;
-		this.headers = {
-			"Content-Type": "application/json",
-			apikey: anonKey,
-		};
-
-		const schema = options.db?.schema;
-		if (schema !== undefined && schema.size() > 0 && schema !== "public") {
-			this.headers.Prefer = "schema=" + schema;
-		}
+		this.rest = new SupabaseRequest(baseUrl + "rest/v1/", anonKey);
+		this.options = options;
 	}
 
 	public from<TableName extends string & keyof Schema["Tables"], Table extends Schema["Tables"][TableName]>(
@@ -42,6 +33,6 @@ export default class SupabaseClient<
 			error("Invalid relation name: relation cannot be empty");
 		}
 
-		return new QueryBuilder<Table>(this.baseUrl + relation + "/", this.headers);
+		return new QueryBuilder<Table>(this.rest, this.options.global?.headers, relation, this.options.db?.schema);
 	}
 }
