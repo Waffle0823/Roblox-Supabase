@@ -1,21 +1,20 @@
 import SupabaseRequest from "../request/SupabaseRequest";
 import { SupabaseClientOptions } from "./types/client";
-import { GenericSchema } from "./types/common";
+import { DatabaseWithoutInternals, GenericSchema, Headers } from "./types/common";
 
 export default class SupabaseClient<
-	Database extends Record<string, GenericSchema>,
-	SchemaName extends string & keyof Omit<Database, "__InternalSupabase"> = "public" extends keyof Omit<
-		Database,
-		"__InternalSupabase"
-	>
+	Database extends Record<string, unknown>,
+	SchemaName extends string & keyof DatabaseWithoutInternals<Database> =
+		"public" extends keyof DatabaseWithoutInternals<Database>
 		? "public"
-		: string & keyof Omit<Database, "__InternalSupabase">,
-	Schema extends GenericSchema = Omit<Database, "__InternalSupabase">[SchemaName],
+			: string & keyof DatabaseWithoutInternals<Database>,
+	Schema extends GenericSchema = DatabaseWithoutInternals<Database>[SchemaName],
 > {
 	private baseUrl: string;
 	private anonKey: Secret;
 	private rest: SupabaseRequest;
-	private headers: Record<string, unknown>;
+	private headers: Headers;
+	private schema: string;
 
 	constructor(baseUrl: string, anonKey: Secret, options: SupabaseClientOptions<SchemaName>) {
 		assert(baseUrl, "baseUrl is required");

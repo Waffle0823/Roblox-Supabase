@@ -1,3 +1,10 @@
+export type Headers = Record<string, unknown>;
+
+export type DatabaseWithoutInternals<DB extends Record<string, unknown>> = {
+	[K in keyof DB as K extends "__InternalSupabase" ? never : DB[K] extends GenericSchema ? K : never]: DB[K] &
+		GenericSchema;
+};
+
 export type GenericRelationship = {
 	foreignKeyName: string;
 	columns: string[];
