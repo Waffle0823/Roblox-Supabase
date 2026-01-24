@@ -31,7 +31,6 @@ export default class QueryBuilder<Table extends GenericTable> {
 	 * @param options.head Whether to retrieve only metadata
 	 * @param options.count Count options
 	 * @returns A FilterBuilder instance for building the query
-	 * @unimplemented This method is not yet implemented
 	 */
 	public select(
 		columns?: Columns<Table>,
@@ -89,7 +88,6 @@ export default class QueryBuilder<Table extends GenericTable> {
 	 * @param options.count Count options
 	 * @param options.defaultToNull Whether to default missing values to null
 	 * @returns Promise resolving to the upserted rows
-	 * @unimplemented This method is not yet implemented
 	 */
 	public upsert(
 		data: Table["Update"],
@@ -104,7 +102,35 @@ export default class QueryBuilder<Table extends GenericTable> {
 			count?: Count;
 			defaultToNull?: boolean;
 		} = {},
-	) {}
+	): FilterBuilder<Table> {
+		const resolution = ignoreDuplicates ? "ignore-duplicates" : "merge-duplicates";
+		this.headers = addPrefer(this.headers, "resolution", resolution);
+
+		if (count) {
+			this.headers = addPrefer(this.headers, "count", count);
+		}
+
+		if (!defaultToNull) {
+			this.headers = addPrefer(this.headers, "missing", "default");
+		}
+
+		let path = setSchema(this.relation, this.schema);
+		if (onConflict !== undefined) {
+			path += path.find("?")[0] !== undefined ? "&" : "?";
+			path += `on_conflict=${onConflict}`;
+		}
+
+		return new FilterBuilder<Table>(
+			this.rest,
+			this.headers,
+			this.relation,
+			this.schema,
+			undefined,
+			"POST",
+			data,
+			path,
+		);
+	}
 
 	/**
 	 * Updates existing records in the table
@@ -112,7 +138,6 @@ export default class QueryBuilder<Table extends GenericTable> {
 	 * @param options Update options
 	 * @param options.count Count options
 	 * @returns Promise resolving to the updated rows
-	 * @unimplemented This method is not yet implemented
 	 */
 	public update(
 		data: Table["Update"],
@@ -121,18 +146,29 @@ export default class QueryBuilder<Table extends GenericTable> {
 		}: {
 			count?: Count;
 		} = {},
-	) {}
+	): FilterBuilder<Table> {
+		if (count) {
+			this.headers = addPrefer(this.headers, "count", count);
+		}
+
+		return new FilterBuilder<Table>(this.rest, this.headers, this.relation, this.schema, undefined, "PATCH", data);
+	}
 
 	/**
 	 * Deletes records from the table
 	 * @param options Delete options
 	 * @param options.count Count options
 	 * @returns Promise resolving to the deleted rows
-	 * @unimplemented This method is not yet implemented
 	 */
 	public delete({
 		count,
 	}: {
 		count?: Count;
-	} = {}) {}
+	} = {}): FilterBuilder<Table> {
+		if (count) {
+			this.headers = addPrefer(this.headers, "count", count);
+		}
+
+		return new FilterBuilder<Table>(this.rest, this.headers, this.relation, this.schema, undefined, "DELETE");
+	}
 }
