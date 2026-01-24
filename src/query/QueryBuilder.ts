@@ -66,8 +66,6 @@ export default class QueryBuilder<Table extends GenericTable> {
 			returning?: Returning;
 		} = {},
 	): Promise<SupabaseResponse<Table["Row"][]>> {
-		assert(data, "Data cannot be empty");
-
 		const path = setSchema(this.relation, this.schema);
 
 		this.headers = addPrefer(this.headers, "return", returning);

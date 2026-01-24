@@ -27,8 +27,7 @@ export default class SupabaseClient<
 	 * @param options Optional configuration options
 	 */
 	constructor(baseUrl: string, anonKey: Secret, options?: SupabaseClientOptions<SchemaName>) {
-		assert(baseUrl !== undefined || baseUrl !== "", "baseUrl is required");
-		assert(anonKey, "anonKey is required");
+		assert(baseUrl !== "", "baseUrl cannot be empty");
 
 		if (baseUrl.sub(-1) !== "/") {
 			baseUrl += "/";
