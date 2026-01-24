@@ -4,7 +4,18 @@ import { SupabaseResponse } from "../request/types/client";
 import { setSchema } from "./Utils";
 import { Count, Returning } from "./types/common";
 
+/**
+ * Builds and executes database queries against a Supabase table
+ * @template Table The table structure type
+ */
 export default class QueryBuilder<Table extends GenericTable> {
+	/**
+	 * Creates a new QueryBuilder instance
+	 * @param rest The SupabaseRequest instance for making API calls
+	 * @param headers Optional headers to include with requests
+	 * @param relation The table or view name to query
+	 * @param schema Optional schema name
+	 */
 	constructor(
 		private rest: SupabaseRequest,
 		private headers: Headers = {},
@@ -12,6 +23,15 @@ export default class QueryBuilder<Table extends GenericTable> {
 		private schema?: string,
 	) {}
 
+	/**
+	 * Performs a SELECT query to retrieve data from the table
+	 * @param columns The columns to select or "*" for all columns
+	 * @param options Additional query options
+	 * @param options.head Whether to retrieve only metadata
+	 * @param options.count Count options
+	 * @returns Promise resolving to query results
+	 * @unimplemented This method is not yet implemented
+	 */
 	public select(
 		columns?: keyof Table["Row"] | "*",
 		options?: {
@@ -20,6 +40,13 @@ export default class QueryBuilder<Table extends GenericTable> {
 		},
 	) {}
 
+	/**
+	 * Inserts new records into the table
+	 * @param data The data to insert
+	 * @param options Insert options
+	 * @param options.returning How data should be returned, defaults to "representation"
+	 * @returns Promise resolving to the inserted rows
+	 */
 	public async insert(
 		data: Table["Insert"],
 		{
@@ -44,6 +71,17 @@ export default class QueryBuilder<Table extends GenericTable> {
 		return response;
 	}
 
+	/**
+	 * Inserts or updates records based on a conflict target
+	 * @param data The data to upsert
+	 * @param options Upsert options
+	 * @param options.onConflict Column to check for conflicts
+	 * @param options.ignoreDuplicates Whether to ignore duplicate inserts
+	 * @param options.count Count options
+	 * @param options.defaultToNull Whether to default missing values to null
+	 * @returns Promise resolving to the upserted rows
+	 * @unimplemented This method is not yet implemented
+	 */
 	public upsert(
 		data: Table["Update"],
 		{
@@ -59,6 +97,14 @@ export default class QueryBuilder<Table extends GenericTable> {
 		} = {},
 	) {}
 
+	/**
+	 * Updates existing records in the table
+	 * @param data The data to update
+	 * @param options Update options
+	 * @param options.count Count options
+	 * @returns Promise resolving to the updated rows
+	 * @unimplemented This method is not yet implemented
+	 */
 	public update(
 		data: Table["Update"],
 		{
@@ -68,6 +114,13 @@ export default class QueryBuilder<Table extends GenericTable> {
 		} = {},
 	) {}
 
+	/**
+	 * Deletes records from the table
+	 * @param options Delete options
+	 * @param options.count Count options
+	 * @returns Promise resolving to the deleted rows
+	 * @unimplemented This method is not yet implemented
+	 */
 	public delete({
 		count,
 	}: {
