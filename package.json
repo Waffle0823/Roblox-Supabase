@@ -52,6 +52,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@rbxts/services": "^1.6.0"
+    "@rbxts/services": "^1.6.0",
+    "@rbxts/t": "^3.2.1"
   }
 }
