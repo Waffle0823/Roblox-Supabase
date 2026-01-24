@@ -1,7 +1,7 @@
 import { Headers, GenericTable } from "../client/types/common";
 import SupabaseRequest from "../request/SupabaseRequest";
 import { SupabaseResponse } from "../request/types/client";
-import { setSchema } from "./Utils";
+import { addPrefer, setSchema } from "./Utils";
 import { Count, Returning } from "./types/common";
 
 /**
@@ -59,7 +59,7 @@ export default class QueryBuilder<Table extends GenericTable> {
 
 		const path = setSchema(this.relation, this.schema);
 
-		this.headers["Prefer"] = `return=${returning}`;
+		this.headers = addPrefer(this.headers, "return", returning);
 
 		const response = await this.rest.request<Table["Row"][]>({
 			method: "POST",
