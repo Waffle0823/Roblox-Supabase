@@ -1,8 +1,9 @@
 import { Headers, GenericTable } from "../client/types/common";
+import FilterBuilder from "../filter/FilterBuilder";
 import SupabaseRequest from "../request/SupabaseRequest";
 import { SupabaseResponse } from "../request/types/client";
 import { addPrefer, setSchema } from "./Utils";
-import { Count, Returning } from "./types/common";
+import { Columns, Count, Returning } from "./types/common";
 
 /**
  * Builds and executes database queries against a Supabase table
@@ -29,16 +30,26 @@ export default class QueryBuilder<Table extends GenericTable> {
 	 * @param options Additional query options
 	 * @param options.head Whether to retrieve only metadata
 	 * @param options.count Count options
-	 * @returns Promise resolving to query results
+	 * @returns A FilterBuilder instance for building the query
 	 * @unimplemented This method is not yet implemented
 	 */
 	public select(
-		columns?: keyof Table["Row"] | "*",
+		columns?: Columns<Table>,
 		options?: {
 			head?: boolean;
 			count?: Count;
 		},
-	) {}
+	) {
+		if (options?.count) {
+			this.headers = addPrefer(this.headers, "count", options.count);
+		}
+
+		if (options?.head) {
+			this.headers = addPrefer(this.headers, "head", tostring(options.head));
+		}
+
+		return new FilterBuilder(this.rest, this.headers, this.relation, this.schema, columns);
+	}
 
 	/**
 	 * Inserts new records into the table
