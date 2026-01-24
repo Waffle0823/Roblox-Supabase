@@ -29,7 +29,7 @@ export default class SupabaseRequest {
 			status: response.StatusCode,
 			statusMessage: response.StatusMessage,
 			body:
-				response.Body !== undefined || response.Body !== ""
+				response.Body !== undefined && response.Body !== ""
 					? (HttpService.JSONDecode(response.Body) as T)
 					: (undefined as T),
 			headers: response.Headers,
