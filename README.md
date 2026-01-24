@@ -108,8 +108,10 @@ To start using Roblox-Supabase in your Roblox project, follow these steps:
    ```ts
    import { SupabaseClient } from "@rbxts/roblox-supabase";
    
+   const HttpService = game.GetService("HttpService");
+   
    // Initialize the client
-   const supabase = new SupabaseClient("YOUR_SUPABASE_URL", "YOUR_SUPABASE_ANON_KEY");
+   const supabase = new SupabaseClient("YOUR_SUPABASE_URL", HttpService.GetSecret("SUPABASE_ANON_KEY"));
    ```
 
 
@@ -123,7 +125,9 @@ To start using Roblox-Supabase in your Roblox project, follow these steps:
 // Initialize the client
 import { SupabaseClient } from "@rbxts/roblox-supabase";
 
-const supabase = new SupabaseClient("YOUR_SUPABASE_URL", "YOUR_SUPABASE_ANON_KEY");
+const HttpService = game.GetService("HttpService");
+
+const supabase = new SupabaseClient("YOUR_SUPABASE_URL", HttpService.GetSecret("SUPABASE_ANON_KEY"));
 
 // Make a request
 const result = await supabase
@@ -140,7 +144,7 @@ _More examples and detailed documentation coming soon._
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Basic Supabase client implementation
+- [x] Basic Supabase client implementation
 - [ ] Request functionality
 - [ ] Complete Supabase API coverage
 - [ ] Authentication methods
