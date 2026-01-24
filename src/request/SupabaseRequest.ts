@@ -1,5 +1,6 @@
 import { HttpService } from "@rbxts/services";
 import { SupabaseResponse } from "./types/client";
+import { Headers } from "../client/types/common";
 
 export default class SupabaseRequest {
 	constructor(
