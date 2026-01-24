@@ -137,6 +137,26 @@ const result = await supabase
   .single();
 ```
 
+### Using Supabase CLI and Type Generation
+
+You can use the Supabase CLI to generate TypeScript types for your database, ensuring full type safety in your Roblox project.
+
+```sh
+npx supabase gen types typescript --project-id "your-project-id" --schema public > supabase-types.ts
+```
+
+Then, import your generated types and pass them to `SupabaseClient`:
+
+```ts
+import { SupabaseClient } from "@rbxts/roblox-supabase";
+import type { Database } from "./supabase-types";
+
+const HttpService = game.GetService("HttpService");
+
+// Pass your Database type for full type safety
+const supabase = new SupabaseClient<Database>("YOUR_SUPABASE_URL", HttpService.GetSecret("SUPABASE_ANON_KEY"));
+```
+
 _More examples and detailed documentation coming soon._
 
 
