@@ -25,14 +25,26 @@ export default class SupabaseRequest {
 			Body: params.body !== undefined ? HttpService.JSONEncode(params.body) : undefined,
 		});
 
+		const parsedBody =
+			response.Body !== undefined && response.Body !== "" ? HttpService.JSONDecode(response.Body) : undefined;
+
+		let statusMessage: string;
+		if (response.StatusMessage !== undefined && response.StatusMessage !== "") {
+			statusMessage = response.StatusMessage;
+		} else if (
+			(parsedBody as Record<string, string>).message !== undefined &&
+			(parsedBody as Record<string, string>).message !== ""
+		) {
+			statusMessage = (parsedBody as Record<string, string>).message;
+		} else {
+			statusMessage = "";
+		}
+
 		return {
 			success: response.Success,
 			status: response.StatusCode,
-			statusMessage: response.StatusMessage,
-			body:
-				response.Body !== undefined && response.Body !== ""
-					? (HttpService.JSONDecode(response.Body) as T)
-					: (undefined as T),
+			statusMessage: statusMessage,
+			data: parsedBody as T,
 			headers: response.Headers,
 		};
 	}
