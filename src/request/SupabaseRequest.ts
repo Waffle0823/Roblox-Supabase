@@ -11,7 +11,7 @@ export default class SupabaseRequest {
 		method: "GET" | "HEAD" | "POST" | "PUT" | "DELETE" | "PATCH";
 		path: string;
 		body?: unknown;
-		headers?: Record<string, string>;
+		headers?: Headers;
 	}): Promise<SupabaseResponse<T>> {
 		const response = HttpService.RequestAsync({
 			Url: this.baseUrl + params.path,
