@@ -1,6 +1,8 @@
 import { Headers, GenericTable } from "../client/types/common";
 import SupabaseRequest from "../request/SupabaseRequest";
-import { Count } from "./types/common";
+import { SupabaseResponse } from "../request/types/client";
+import { setSchema } from "./Utils";
+import { Count, Returning } from "./types/common";
 
 export default class QueryBuilder<Table extends GenericTable> {
 	constructor(
@@ -18,16 +20,29 @@ export default class QueryBuilder<Table extends GenericTable> {
 		},
 	) {}
 
-	public insert(
+	public async insert(
 		data: Table["Insert"],
 		{
-			count,
-			defaultToNull = true,
+			returning = "representation",
 		}: {
-			count?: Count;
-			defaultToNull?: boolean;
+			returning?: Returning;
 		} = {},
-	) {}
+	): Promise<SupabaseResponse<Table["Row"][]>> {
+		assert(data, "Data cannot be empty");
+
+		const path = setSchema(this.relation, this.schema);
+
+		this.headers["Prefer"] = `return=${returning}`;
+
+		const response = await this.rest.request<Table["Row"][]>({
+			method: "POST",
+			path,
+			headers: this.headers,
+			body: data,
+		});
+
+		return response;
+	}
 
 	public upsert(
 		data: Table["Update"],
