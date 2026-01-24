@@ -17,8 +17,7 @@
   <p align="center">
     A TypeScript-first Supabase wrapper for Roblox, built specifically for the roblox-ts ecosystem.
     <br />
-    <!-- TODO: Add docs link when available -->
-    <a href="https://github.com/Waffle0823/Roblox-Supabase"><strong>Explore the docs »</strong></a>
+    <a href="https://waffle0823.github.io/Roblox-Supabase"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <!-- TODO: Add demo link when available -->
