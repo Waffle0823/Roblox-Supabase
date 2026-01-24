@@ -6,6 +6,11 @@
 [![Issues][issues-shield]][issues-url]
 [![License][license-shield]][license-url]
 
+
+> ⚠️ **Alpha Notice:**
+> 
+> This project is currently in **alpha**. Features and APIs are subject to change, and breaking changes may occur. Use with caution in production environments.
+
 <br />
 <div align="center">
   <a href="https://github.com/Waffle0823/Roblox-Supabase">
