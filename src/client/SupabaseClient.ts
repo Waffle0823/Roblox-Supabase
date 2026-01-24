@@ -12,9 +12,9 @@ export default class SupabaseClient<
 	Schema extends GenericSchema = DatabaseWithoutInternals<Database>[SchemaName],
 > {
 	private rest: SupabaseRequest;
-	private options: SupabaseClientOptions<SchemaName> = {};
+	private options: SupabaseClientOptions<SchemaName>;
 
-	constructor(baseUrl: string, anonKey: Secret, options: SupabaseClientOptions<SchemaName>) {
+	constructor(baseUrl: string, anonKey: Secret, options?: SupabaseClientOptions<SchemaName>) {
 		assert(baseUrl, "baseUrl is required");
 		assert(anonKey, "anonKey is required");
 
@@ -23,7 +23,7 @@ export default class SupabaseClient<
 		}
 
 		this.rest = new SupabaseRequest(baseUrl + "rest/v1/", anonKey);
-		this.options = options;
+		this.options = options ?? {};
 	}
 
 	public from<TableName extends string & keyof Schema["Tables"], Table extends Schema["Tables"][TableName]>(
