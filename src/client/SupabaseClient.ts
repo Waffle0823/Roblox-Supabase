@@ -3,6 +3,12 @@ import SupabaseRequest from "../request/SupabaseRequest";
 import { SupabaseClientOptions } from "./types/client";
 import { DatabaseWithoutInternals, GenericSchema } from "./types/common";
 
+/**
+ * Main client for interacting with your Supabase database
+ * @template Database The database structure type
+ * @template SchemaName The schema name to use, defaults to "public" if available
+ * @template Schema The schema structure derived from the database
+ */
 export default class SupabaseClient<
 	Database extends Record<string, unknown>,
 	SchemaName extends string & keyof DatabaseWithoutInternals<Database> =
@@ -14,8 +20,14 @@ export default class SupabaseClient<
 	private rest: SupabaseRequest;
 	private options: SupabaseClientOptions<SchemaName>;
 
+	/**
+	 * Creates a new Supabase client instance
+	 * @param baseUrl The URL of your Supabase project
+	 * @param anonKey The anonymous API key for your Supabase project
+	 * @param options Optional configuration options
+	 */
 	constructor(baseUrl: string, anonKey: Secret, options?: SupabaseClientOptions<SchemaName>) {
-		assert(baseUrl, "baseUrl is required");
+		assert(baseUrl !== undefined || baseUrl !== "", "baseUrl is required");
 		assert(anonKey, "anonKey is required");
 
 		if (baseUrl.sub(-1) !== "/") {
@@ -26,6 +38,13 @@ export default class SupabaseClient<
 		this.options = options ?? {};
 	}
 
+	/**
+	 * Creates a query builder for the specified table
+	 * @template TableName The name of the table to query
+	 * @template Table The structure of the table
+	 * @param relation The table name or view to query
+	 * @returns A QueryBuilder instance for the specified table
+	 */
 	public from<TableName extends string & keyof Schema["Tables"], Table extends Schema["Tables"][TableName]>(
 		relation: TableName,
 	) {
