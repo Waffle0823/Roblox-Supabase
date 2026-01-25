@@ -32,7 +32,7 @@ export default class SupabaseRequest {
 		path: string;
 		body?: unknown;
 		headers?: Headers;
-	}): Promise<SupabaseResponse<T>> {
+	}): Promise<SupabaseResponse<T | undefined>> {
 		const response = HttpService.RequestAsync({
 			Url: this.baseUrl + params.path,
 			Method: params.method,
@@ -63,7 +63,7 @@ export default class SupabaseRequest {
 			success: response.Success,
 			status: response.StatusCode,
 			statusMessage: statusMessage,
-			data: parsedBody as T,
+			data: parsedBody as T | undefined,
 			headers: response.Headers,
 		};
 	}
