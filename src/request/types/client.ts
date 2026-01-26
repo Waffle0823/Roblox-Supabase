@@ -42,6 +42,8 @@ export default class PostgrestError {
  * Contains common properties shared by success and error responses
  */
 export interface SupabaseResponseBase {
+	/** Whether the API request was successful */
+	success: boolean;
 	/** HTTP status code returned by the API */
 	status: number;
 	/** HTTP status text describing the response status */
