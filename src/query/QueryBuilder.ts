@@ -118,6 +118,7 @@ export default class QueryBuilder<Table extends GenericTable> {
 			returning?: Returning;
 			missing?: Missing;
 			resolution?: Resolution;
+			// TODO:Update to Columns<Table>
 			onConflict?: string;
 		} = {},
 	): FilterBuilder<Table> {
