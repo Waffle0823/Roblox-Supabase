@@ -81,6 +81,8 @@ export type Database = {
 };
 ```
 
+> Looking to automate this process? Jump to [Automating Type Generation](#automating-type-generation).
+
 ## Setting Up the Client with Types
 
 When initializing your Supabase client, pass your database type as a generic parameter:
