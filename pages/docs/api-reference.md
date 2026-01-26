@@ -121,8 +121,8 @@ Performs a SELECT query to retrieve data from the table.
 **Parameters:**
 
 - `columns`: The columns to select or "\*" for all columns
-- `options.count`: Count options ("exact", "planned", "estimated")
-- `options.head`: Whether to retrieve only metadata
+- `options.count`: Count options (defaults to "estimated")
+- `options.head`: Whether to retrieve only metadata (defaults to false)
 
 **Returns:**
 
