@@ -112,8 +112,7 @@ To start using Roblox-Supabase in your Roblox project, follow these steps:
 4. Initialize the client in your code:
    ```ts
    import { SupabaseClient } from "@rbxts/roblox-supabase";
-   
-   const HttpService = game.GetService("HttpService");
+   import { HttpService } from "@rbxts/services";
    
    // Initialize the client
    const supabase = new SupabaseClient("YOUR_SUPABASE_URL", HttpService.GetSecret("SUPABASE_ANON_KEY"));
@@ -129,8 +128,7 @@ To start using Roblox-Supabase in your Roblox project, follow these steps:
 ```ts
 // Initialize the client
 import { SupabaseClient } from "@rbxts/roblox-supabase";
-
-const HttpService = game.GetService("HttpService");
+import { HttpService } from "@rbxts/services";
 
 const supabase = new SupabaseClient("YOUR_SUPABASE_URL", HttpService.GetSecret("SUPABASE_ANON_KEY"));
 
@@ -155,8 +153,7 @@ Then, import your generated types and pass them to `SupabaseClient`:
 ```ts
 import { SupabaseClient } from "@rbxts/roblox-supabase";
 import type { Database } from "./supabase-types";
-
-const HttpService = game.GetService("HttpService");
+import { HttpService } from "@rbxts/services";
 
 // Pass your Database type for full type safety
 const supabase = new SupabaseClient<Database>("YOUR_SUPABASE_URL", HttpService.GetSecret("SUPABASE_ANON_KEY"));
