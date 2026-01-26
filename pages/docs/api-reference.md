@@ -166,8 +166,7 @@ const { data, error } = await supabase
 	.insert({
 		username: "newuser",
 		email: "user@example.com",
-	})
-	.execute();
+	});
 ```
 
 #### upsert
