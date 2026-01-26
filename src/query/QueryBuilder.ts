@@ -53,14 +53,15 @@ export default class QueryBuilder<Table extends GenericTable> {
 
 		setAcceptProfile(this.headers, this.schema);
 
+		let path: string = "";
 		if (columns !== undefined) {
 			const selectColumns = typeIs(columns, "table")
 				? (columns as (keyof Table["Row"])[]).join(",")
 				: tostring(columns);
-			this.baseUrl = addParam(this.baseUrl, "select", selectColumns);
+			path = addParam(path, "select", selectColumns);
 		}
 
-		return new FilterBuilder("SELECT", this.baseUrl, this.anonKey, this.headers);
+		return new FilterBuilder(this.baseUrl, this.anonKey, { method: "GET", headers: this.headers, path: path });
 	}
 
 	/**
@@ -117,11 +118,17 @@ export default class QueryBuilder<Table extends GenericTable> {
 
 		setContentProfile(this.headers, this.schema);
 
+		let path: string = "";
 		if (onConflict !== undefined) {
-			this.baseUrl = addParam(this.baseUrl, "on_conflict", tostring(onConflict));
+			path = addParam(path, "on_conflict", tostring(onConflict));
 		}
 
-		return new FilterBuilder<Table>("UPSERT", this.baseUrl, this.anonKey, this.headers, data);
+		return new FilterBuilder<Table>(this.baseUrl, this.anonKey, {
+			method: "POST",
+			headers: this.headers,
+			path: path,
+			body: data,
+		});
 	}
 
 	/**
@@ -132,7 +139,11 @@ export default class QueryBuilder<Table extends GenericTable> {
 	public update(data: Table["Update"]): FilterBuilder<Table> {
 		setContentProfile(this.headers, this.schema);
 
-		return new FilterBuilder<Table>("UPDATE", this.baseUrl, this.anonKey, this.headers, data);
+		return new FilterBuilder<Table>(this.baseUrl, this.anonKey, {
+			method: "PATCH",
+			headers: this.headers,
+			body: data,
+		});
 	}
 
 	/**
@@ -142,6 +153,9 @@ export default class QueryBuilder<Table extends GenericTable> {
 	public delete(): FilterBuilder<Table> {
 		setContentProfile(this.headers, this.schema);
 
-		return new FilterBuilder<Table>("DELETE", this.baseUrl, this.anonKey, this.headers);
+		return new FilterBuilder<Table>(this.baseUrl, this.anonKey, {
+			method: "DELETE",
+			headers: this.headers,
+		});
 	}
 }

@@ -3,7 +3,7 @@ import SupabaseRequest from "../request/SupabaseRequest";
 import { addParam } from "../query/Utils";
 import { HttpService } from "@rbxts/services";
 import { isArray } from "./Utils";
-import { FilterOperator, SqlOperation } from "./types/common";
+import { FilterOperator } from "./types/common";
 import { PostgrestError, SupabaseFailResponse, SupabaseResponse } from "../request/types/client";
 import { HttpMethod } from "../request/types/common";
 
@@ -11,16 +11,26 @@ const PostgrestReservedCharsRegexp = "[,()]";
 
 export default class FilterBuilder<Table extends GenericTable> {
 	private rest: SupabaseRequest;
-	private path: string = "";
+	private method: HttpMethod;
+	private headers: Headers;
+	private body?: unknown;
+	private path: string;
 
 	constructor(
-		private sqlOperation: SqlOperation,
 		private baseUrl: string,
 		private anonKey: Secret,
-		private headers: Headers = {},
-		private body?: unknown,
+		options: {
+			method: HttpMethod;
+			body?: unknown;
+			headers?: Headers;
+			path?: string;
+		},
 	) {
 		this.rest = new SupabaseRequest(this.baseUrl, this.anonKey);
+		this.method = options.method;
+		this.body = options.body;
+		this.headers = options.headers ?? {};
+		this.path = options.path ?? "";
 	}
 
 	public eq<ColumnName extends string & keyof Table["Row"]>(
@@ -302,17 +312,8 @@ export default class FilterBuilder<Table extends GenericTable> {
 	}
 
 	public async execute(): Promise<SupabaseResponse<Table["Row"][]>> {
-		let method: HttpMethod | undefined;
-		if (this.sqlOperation === "SELECT") method = "GET";
-		if (this.sqlOperation === "INSERT") method = "POST";
-		if (this.sqlOperation === "UPSERT") method = "POST";
-		if (this.sqlOperation === "UPDATE") method = "PATCH";
-		if (this.sqlOperation === "DELETE") method = "DELETE";
-
-		if (method === undefined) error("Invalid SQL operation");
-
 		return this.rest.request<Table["Row"][]>({
-			method: method,
+			method: this.method,
 			path: this.path,
 			headers: this.headers,
 			body: this.body,
@@ -322,17 +323,8 @@ export default class FilterBuilder<Table extends GenericTable> {
 	public async maybeSingle(): Promise<SupabaseResponse<Table["Row"] | undefined>> {
 		this.headers["Accept"] = "application/vnd.pgrst.object+json";
 
-		let method: HttpMethod | undefined;
-		if (this.sqlOperation === "SELECT") method = "GET";
-		if (this.sqlOperation === "INSERT") method = "POST";
-		if (this.sqlOperation === "UPSERT") method = "POST";
-		if (this.sqlOperation === "UPDATE") method = "PATCH";
-		if (this.sqlOperation === "DELETE") method = "DELETE";
-
-		if (method === undefined) error("Invalid SQL operation");
-
 		const response = await this.rest.request<Table["Row"] | undefined>({
-			method: method,
+			method: this.method,
 			path: this.path,
 			headers: this.headers,
 			body: this.body,
@@ -344,17 +336,8 @@ export default class FilterBuilder<Table extends GenericTable> {
 	public async single(): Promise<SupabaseResponse<Table["Row"]>> {
 		this.headers["Accept"] = "application/vnd.pgrst.object+json";
 
-		let method: HttpMethod | undefined;
-		if (this.sqlOperation === "SELECT") method = "GET";
-		if (this.sqlOperation === "INSERT") method = "POST";
-		if (this.sqlOperation === "UPSERT") method = "POST";
-		if (this.sqlOperation === "UPDATE") method = "PATCH";
-		if (this.sqlOperation === "DELETE") method = "DELETE";
-
-		if (method === undefined) error("Invalid SQL operation");
-
 		const response = await this.rest.request<Table["Row"]>({
-			method: method,
+			method: this.method,
 			path: this.path,
 			headers: this.headers,
 			body: this.body,
