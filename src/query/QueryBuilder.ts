@@ -25,7 +25,7 @@ export default class QueryBuilder<Table extends GenericTable> {
 		private relation: string,
 		private schema?: string,
 	) {
-		this.baseUrl += this.relation + "/";
+		this.baseUrl += this.relation;
 	}
 
 	/**
