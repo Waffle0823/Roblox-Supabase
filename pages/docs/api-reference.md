@@ -110,8 +110,8 @@ constructor(
 select(
   columns?: Columns<Table>,
   options?: {
-    head?: boolean;
     count?: Count;
+    head?: boolean;
   }
 ): FilterBuilder<Table>
 ```
@@ -121,8 +121,8 @@ Performs a SELECT query to retrieve data from the table.
 **Parameters:**
 
 - `columns`: The columns to select or "\*" for all columns
-- `options.head`: Whether to retrieve only metadata
 - `options.count`: Count options ("exact", "planned", "estimated")
+- `options.head`: Whether to retrieve only metadata
 
 **Returns:**
 
