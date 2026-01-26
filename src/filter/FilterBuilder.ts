@@ -10,13 +10,18 @@ import { HttpMethod } from "../request/types/common";
 const PostgrestReservedCharsRegexp = "[,()]";
 
 export default class FilterBuilder<Table extends GenericTable> {
+	private rest: SupabaseRequest;
+	private path: string = "";
+
 	constructor(
-		private rest: SupabaseRequest,
-		private headers: Headers = {},
-		private path: string,
 		private sqlOperation: SqlOperation,
+		private baseUrl: string,
+		private anonKey: Secret,
+		private headers: Headers = {},
 		private body?: unknown,
-	) {}
+	) {
+		this.rest = new SupabaseRequest(this.baseUrl, this.anonKey);
+	}
 
 	public eq<ColumnName extends string & keyof Table["Row"]>(
 		column: ColumnName,
