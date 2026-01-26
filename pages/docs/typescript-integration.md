@@ -123,7 +123,7 @@ const { data } = await supabase.from("users").select("id, username, email").exec
 // This would cause a compile error
 const badQuery = await supabase
 	.from("users")
-	.select("id, unknown_column") // TypeScript error
+	.select(["id", "unknown_column"]) // TypeScript error
 	.execute();
 ```
 
