@@ -45,7 +45,7 @@ export default class QueryBuilder<Table extends GenericTable> {
 			count?: Count;
 			head?: boolean;
 		} = {},
-	) {
+	): FilterBuilder<Table> {
 		addPrefer(this.headers, "count", count);
 		addPrefer(this.headers, "head", tostring(head));
 
