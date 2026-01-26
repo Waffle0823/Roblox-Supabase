@@ -216,7 +216,10 @@ const { data, error } = await supabase
 
 ```typescript
 update(
-  data: Table["Update"]
+  data: Table["Update"],
+  options?: {
+    returning?: Returning;
+  }
 ): FilterBuilder<Table>
 ```
 
@@ -225,6 +228,7 @@ Updates existing records in the table.
 **Parameters:**
 
 - `data`: The data to update
+- `options.returning`: How data should be returned (defaults to "minimal")
 
 **Returns:**
 
