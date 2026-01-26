@@ -3,7 +3,7 @@ import FilterBuilder from "../filter/FilterBuilder";
 import SupabaseRequest from "../request/SupabaseRequest";
 import { SupabaseResponse } from "../request/types/client";
 import { addParam, addPrefer, setAcceptProfile, setContentProfile } from "./Utils";
-import { Columns, Count, Returning } from "./types/common";
+import { Columns, Count, Missing, Resolution, Returning } from "./types/common";
 
 /**
  * Builds and executes database queries against a Supabase table
@@ -38,18 +38,16 @@ export default class QueryBuilder<Table extends GenericTable> {
 	 */
 	public select(
 		columns?: Columns<Table>,
-		options?: {
-			head?: boolean;
+		{
+			count = "estimated",
+			head = false,
+		}: {
 			count?: Count;
-		},
+			head?: boolean;
+		} = {},
 	) {
-		if (options?.count) {
-			addPrefer(this.headers, "count", options.count);
-		}
-
-		if (options?.head) {
-			addPrefer(this.headers, "head", tostring(options.head));
-		}
+		addPrefer(this.headers, "count", count);
+		addPrefer(this.headers, "head", tostring(head));
 
 		setAcceptProfile(this.headers, this.schema);
 
@@ -75,13 +73,16 @@ export default class QueryBuilder<Table extends GenericTable> {
 		data: Table["Insert"],
 		{
 			returning = "representation",
+			missing = "default",
 		}: {
 			returning?: Returning;
+			missing?: Missing;
 		} = {},
 	): Promise<SupabaseResponse<Table["Row"][]>> {
 		setContentProfile(this.headers, this.schema);
 
-		addPrefer(this.headers, "return", tostring(returning));
+		addPrefer(this.headers, "return", returning);
+		addPrefer(this.headers, "missing", missing);
 
 		const rest = new SupabaseRequest(this.baseUrl, this.anonKey);
 
@@ -106,21 +107,26 @@ export default class QueryBuilder<Table extends GenericTable> {
 	public upsert(
 		data: Table["Update"],
 		{
+			returning = "minimal",
+			missing = "default",
+			resolution = "merge-duplicates",
 			onConflict,
-			ignoreDuplicates = false,
 		}: {
+			returning?: Returning;
+			missing?: Missing;
+			resolution?: Resolution;
 			onConflict?: string;
-			ignoreDuplicates?: boolean;
 		} = {},
 	): FilterBuilder<Table> {
-		const resolution = ignoreDuplicates ? "ignore-duplicates" : "merge-duplicates";
-		addPrefer(this.headers, "resolution", resolution);
-
 		setContentProfile(this.headers, this.schema);
 
+		addPrefer(this.headers, "return", returning);
+		addPrefer(this.headers, "resolution", resolution);
+		addPrefer(this.headers, "missing", missing);
+
 		let path: string = "";
-		if (onConflict !== undefined) {
-			path = addParam(path, "on_conflict", tostring(onConflict));
+		if (onConflict !== undefined && onConflict !== "") {
+			path = addParam(path, "on_conflict", onConflict);
 		}
 
 		return new FilterBuilder<Table>(this.baseUrl, this.anonKey, {
@@ -136,8 +142,17 @@ export default class QueryBuilder<Table extends GenericTable> {
 	 * @param data The data to update
 	 * @returns Promise resolving to the updated rows
 	 */
-	public update(data: Table["Update"]): FilterBuilder<Table> {
+	public update(
+		data: Table["Update"],
+		{
+			returning = "minimal",
+		}: {
+			returning?: Returning;
+		} = {},
+	): FilterBuilder<Table> {
 		setContentProfile(this.headers, this.schema);
+
+		addPrefer(this.headers, "return", returning);
 
 		return new FilterBuilder<Table>(this.baseUrl, this.anonKey, {
 			method: "PATCH",
@@ -150,8 +165,10 @@ export default class QueryBuilder<Table extends GenericTable> {
 	 * Deletes records from the table
 	 * @returns Promise resolving to the deleted rows
 	 */
-	public delete(): FilterBuilder<Table> {
+	public delete({ returning = "minimal" }: { returning?: Returning } = {}): FilterBuilder<Table> {
 		setContentProfile(this.headers, this.schema);
+
+		addPrefer(this.headers, "return", returning);
 
 		return new FilterBuilder<Table>(this.baseUrl, this.anonKey, {
 			method: "DELETE",
