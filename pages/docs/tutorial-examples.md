@@ -61,6 +61,9 @@ const DEFAULT_PLAYER_DATA = {
 	items: [] as string[],
 };
 
+// Type alias for player data
+type PlayerData = Database["public"]["Tables"]["player_data"]["Row"];
+
 // Class for managing player data
 export class PlayerDataManager {
 	private dataCache = new Map<string, PlayerData>();
@@ -259,6 +262,9 @@ type LeaderboardDatabase = {
 	};
 };
 
+// Type alias for leaderboard entry
+type LeaderboardEntry = LeaderboardDatabase["public"]["Tables"]["leaderboard"]["Row"];
+
 const supabase = new SupabaseClient<LeaderboardDatabase>(
 	"https://your-project-url.supabase.co",
 	HttpService.GetSecret("SUPABASE_ANON_KEY"),
@@ -391,6 +397,9 @@ type ConfigDatabase = {
 	};
 };
 
+// Type alias for config entry
+type ConfigEntry = ConfigDatabase["public"]["Tables"]["game_config"]["Row"];
+
 const supabase = new SupabaseClient<ConfigDatabase>(
 	"https://your-project-url.supabase.co",
 	HttpService.GetSecret("SUPABASE_ANON_KEY"),
@@ -451,7 +460,7 @@ export class ConfigManager {
 			} else if (typeIs(defaultValue, "boolean")) {
 				return (value.lower() === "true") as unknown as T;
 			} else if (typeIs(defaultValue, "table")) {
-				return game.GetService("HttpService").JSONDecode(value) as T;
+				return HttpService.JSONDecode(value) as T;
 			}
 
 			// String or other type
@@ -469,7 +478,7 @@ export class ConfigManager {
 			let stringValue: string;
 
 			if (typeIs(value, "table")) {
-				stringValue = game.GetService("HttpService").JSONEncode(value);
+				stringValue = HttpService.JSONEncode(value);
 			} else {
 				stringValue = tostring(value);
 			}
