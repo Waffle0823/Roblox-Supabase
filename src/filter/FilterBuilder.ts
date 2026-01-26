@@ -1,35 +1,22 @@
 import { GenericTable, Headers } from "../client/types/common";
 import SupabaseRequest from "../request/SupabaseRequest";
-import { Columns } from "../query/types/common";
-import { addParam, setSchema } from "../query/Utils";
+import { addParam } from "../query/Utils";
 import { HttpService } from "@rbxts/services";
 import { isArray } from "./Utils";
-import { FilterOperator } from "./types/common";
+import { FilterOperator, SqlOperation } from "./types/common";
 import { SupabaseResponse } from "../request/types/client";
+import { HttpMethod } from "../request/types/common";
 
 const PostgrestReservedCharsRegexp = "[,()]";
 
 export default class FilterBuilder<Table extends GenericTable> {
-	private path: string;
-	private method: "GET" | "HEAD" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET";
-	private body?: unknown;
-
 	constructor(
 		private rest: SupabaseRequest,
 		private headers: Headers = {},
-		private relation: string,
-		private schema?: string,
-		private columns?: Columns<Table>,
-		method?: "GET" | "HEAD" | "POST" | "PUT" | "DELETE" | "PATCH",
-		body?: unknown,
-		initialPath?: string,
-	) {
-		this.path = initialPath ?? setSchema(this.relation, this.schema);
-		if (method !== undefined) {
-			this.method = method;
-		}
-		this.body = body;
-	}
+		private path: string,
+		private sqlOperation: SqlOperation,
+		private body?: unknown,
+	) {}
 
 	public eq<ColumnName extends string & keyof Table["Row"]>(
 		column: ColumnName,
@@ -310,15 +297,17 @@ export default class FilterBuilder<Table extends GenericTable> {
 	}
 
 	public async execute(): Promise<SupabaseResponse<Table["Row"][]>> {
-		if (this.columns !== undefined) {
-			const selectColumns = typeIs(this.columns, "table")
-				? (this.columns as (keyof Table["Row"])[]).join(",")
-				: tostring(this.columns);
-			this.path = addParam(this.path, "select", selectColumns);
-		}
+		let method: HttpMethod | undefined;
+		if (this.sqlOperation === "SELECT") method = "GET";
+		if (this.sqlOperation === "INSERT") method = "POST";
+		if (this.sqlOperation === "UPSERT") method = "POST";
+		if (this.sqlOperation === "UPDATE") method = "PATCH";
+		if (this.sqlOperation === "DELETE") method = "DELETE";
+
+		if (method === undefined) error("Invalid SQL operation");
 
 		return this.rest.request<Table["Row"][]>({
-			method: this.method,
+			method: method,
 			path: this.path,
 			headers: this.headers,
 			body: this.body,
@@ -328,15 +317,17 @@ export default class FilterBuilder<Table extends GenericTable> {
 	public async maybeSingle(): Promise<SupabaseResponse<Table["Row"] | undefined>> {
 		this.headers["Accept"] = "application/vnd.pgrst.object+json";
 
-		if (this.columns !== undefined) {
-			const selectColumns = typeIs(this.columns, "table")
-				? (this.columns as (keyof Table["Row"])[]).join(",")
-				: tostring(this.columns);
-			this.path = addParam(this.path, "select", selectColumns);
-		}
+		let method: HttpMethod | undefined;
+		if (this.sqlOperation === "SELECT") method = "GET";
+		if (this.sqlOperation === "INSERT") method = "POST";
+		if (this.sqlOperation === "UPSERT") method = "POST";
+		if (this.sqlOperation === "UPDATE") method = "PATCH";
+		if (this.sqlOperation === "DELETE") method = "DELETE";
+
+		if (method === undefined) error("Invalid SQL operation");
 
 		const response = await this.rest.request<Table["Row"] | undefined>({
-			method: this.method,
+			method: method,
 			path: this.path,
 			headers: this.headers,
 			body: this.body,
@@ -348,18 +339,26 @@ export default class FilterBuilder<Table extends GenericTable> {
 	public async single(): Promise<SupabaseResponse<Table["Row"]>> {
 		this.headers["Accept"] = "application/vnd.pgrst.object+json";
 
-		if (this.columns !== undefined) {
-			const selectColumns = typeIs(this.columns, "table")
-				? (this.columns as (keyof Table["Row"])[]).join(",")
-				: tostring(this.columns);
-			this.path = addParam(this.path, "select", selectColumns);
-		}
+		let method: HttpMethod | undefined;
+		if (this.sqlOperation === "SELECT") method = "GET";
+		if (this.sqlOperation === "INSERT") method = "POST";
+		if (this.sqlOperation === "UPSERT") method = "POST";
+		if (this.sqlOperation === "UPDATE") method = "PATCH";
+		if (this.sqlOperation === "DELETE") method = "DELETE";
 
-		return this.rest.request<Table["Row"]>({
-			method: this.method,
+		if (method === undefined) error("Invalid SQL operation");
+
+		const response = await this.rest.request<Table["Row"]>({
+			method: method,
 			path: this.path,
 			headers: this.headers,
 			body: this.body,
 		});
+
+		if (response.data === undefined) {
+			error("Expected exactly one row but received zero or multiple rows");
+		}
+
+		return response;
 	}
 }
