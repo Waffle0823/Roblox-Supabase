@@ -50,7 +50,6 @@ export default class SupabaseRequest {
 
 		if (response.Success === true) {
 			return {
-				success: true,
 				status: response.StatusCode,
 				statusText: response.StatusMessage,
 				error: undefined,
@@ -59,7 +58,6 @@ export default class SupabaseRequest {
 			};
 		} else {
 			return {
-				success: false,
 				status: response.StatusCode,
 				statusText: response.StatusMessage,
 				error: parsedBody as PostgrestError,
