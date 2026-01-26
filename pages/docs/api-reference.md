@@ -175,8 +175,10 @@ const { data, error } = await supabase
 upsert(
   data: Table["Update"],
   options?: {
+    returning?: Returning;
+	missing?: Missing;
+    resolution?: Resolution;
     onConflict?: string;
-    ignoreDuplicates?: boolean;
   }
 ): FilterBuilder<Table>
 ```
@@ -186,8 +188,10 @@ Inserts or updates records based on a conflict target.
 **Parameters:**
 
 - `data`: The data to upsert
+- `options.returning`: How data should be returned (defaults to "minimal")
+- `options.missing`: How to handle missing data (defaults to "default")
+- `options.resolution`: How to handle duplicate data (defaults to "merge-duplicates")
 - `options.onConflict`: Column to check for conflicts
-- `options.ignoreDuplicates`: Whether to ignore duplicate inserts
 
 **Returns:**
 
