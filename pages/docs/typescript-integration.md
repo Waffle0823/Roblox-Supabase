@@ -89,9 +89,13 @@ When initializing your Supabase client, pass your database type as a generic par
 
 ```typescript
 import { SupabaseClient } from "@rbxts/roblox-supabase";
+import { HttpService } from "@rbxts/services";
 import { Database } from "./types/database.types";
 
-const supabase = new SupabaseClient<Database>("https://your-project-url.supabase.co", "your-anon-key");
+const supabase = new SupabaseClient<Database>(
+	"https://your-project-url.supabase.co",
+	HttpService.GetSecret("SUPABASE_ANON_KEY"),
+);
 
 export { supabase };
 ```
