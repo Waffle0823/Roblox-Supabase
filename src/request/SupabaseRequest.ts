@@ -1,5 +1,5 @@
 import { HttpService } from "@rbxts/services";
-import { SupabaseResponse } from "./types/client";
+import { PostgrestError, SupabaseResponse } from "./types/client";
 import { Headers } from "../client/types/common";
 import { HttpMethod } from "./types/common";
 
@@ -33,7 +33,7 @@ export default class SupabaseRequest {
 		path: string;
 		body?: unknown;
 		headers?: Headers;
-	}): Promise<SupabaseResponse<T | undefined>> {
+	}): Promise<SupabaseResponse<T>> {
 		const response = HttpService.RequestAsync({
 			Url: this.baseUrl + params.path,
 			Method: params.method,
@@ -48,24 +48,24 @@ export default class SupabaseRequest {
 		const parsedBody =
 			response.Body !== undefined && response.Body !== "" ? HttpService.JSONDecode(response.Body) : undefined;
 
-		let statusMessage: string;
-		if (response.StatusMessage !== undefined && response.StatusMessage !== "") {
-			statusMessage = response.StatusMessage;
-		} else if (
-			(parsedBody as Record<string, string>).message !== undefined &&
-			(parsedBody as Record<string, string>).message !== ""
-		) {
-			statusMessage = (parsedBody as Record<string, string>).message;
+		if (response.Success === true) {
+			return {
+				success: true,
+				status: response.StatusCode,
+				statusText: response.StatusMessage,
+				error: undefined,
+				data: parsedBody as T,
+				count: tonumber(response.Headers["content-range"].split("/")[1]),
+			};
 		} else {
-			statusMessage = "";
+			return {
+				success: false,
+				status: response.StatusCode,
+				statusText: response.StatusMessage,
+				error: parsedBody as PostgrestError,
+				data: undefined,
+				count: undefined,
+			};
 		}
-
-		return {
-			success: response.Success,
-			status: response.StatusCode,
-			statusMessage: statusMessage,
-			data: parsedBody as T | undefined,
-			headers: response.Headers,
-		};
 	}
 }
