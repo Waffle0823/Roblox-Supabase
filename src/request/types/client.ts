@@ -8,9 +8,7 @@ export type SupabaseResponse<T = unknown> = SupabaseSuccessResponse<T> | Supabas
  * Error class representing errors returned from PostgREST/Supabase API
  * Contains detailed information about what went wrong with a database operation
  */
-export default class PostgrestError {
-	/** The name of the error, always "PostgrestError" */
-	name: string;
+export interface PostgrestError {
 	/** Human-readable error message */
 	message: string;
 	/** Additional details about the error */
@@ -19,22 +17,6 @@ export default class PostgrestError {
 	hint: string;
 	/** PostgreSQL error code */
 	code: string;
-
-	/**
-	 * Creates a new PostgrestError instance
-	 * @param context Object containing error details
-	 * @param context.message Human-readable error message
-	 * @param context.details Additional details about the error
-	 * @param context.hint Hint for resolving the error
-	 * @param context.code PostgreSQL error code
-	 */
-	constructor(context: { message: string; details: string; hint: string; code: string }) {
-		this.message = context.message;
-		this.name = "PostgrestError";
-		this.details = context.details;
-		this.hint = context.hint;
-		this.code = context.code;
-	}
 }
 
 /**
