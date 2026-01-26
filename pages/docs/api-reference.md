@@ -243,10 +243,16 @@ const { data, error } = await supabase.from("users").update({ active: true }).eq
 #### delete
 
 ```typescript
-delete(): FilterBuilder<Table>
+delete(options?: {
+    returning?: Returning;
+}): FilterBuilder<Table>
 ```
 
 Deletes records from the table.
+
+**Parameters:**
+
+- `options.returning`: How data should be returned (defaults to "minimal")
 
 **Returns:**
 
