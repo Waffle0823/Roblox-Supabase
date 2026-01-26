@@ -1,6 +1,7 @@
 import { HttpService } from "@rbxts/services";
 import { SupabaseResponse } from "./types/client";
 import { Headers } from "../client/types/common";
+import { HttpMethod } from "./types/common";
 
 /**
  * Handles HTTP requests to a Supabase backend
@@ -28,7 +29,7 @@ export default class SupabaseRequest {
 	 * @returns Promise resolving to a typed Supabase response
 	 */
 	public async request<T = unknown>(params: {
-		method: "GET" | "HEAD" | "POST" | "PUT" | "DELETE" | "PATCH";
+		method: HttpMethod;
 		path: string;
 		body?: unknown;
 		headers?: Headers;
