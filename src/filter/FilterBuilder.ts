@@ -4,7 +4,7 @@ import { addParam } from "../query/Utils";
 import { HttpService } from "@rbxts/services";
 import { isArray } from "./Utils";
 import { FilterOperator, SqlOperation } from "./types/common";
-import { SupabaseResponse } from "../request/types/client";
+import { PostgrestError, SupabaseFailResponse, SupabaseResponse } from "../request/types/client";
 import { HttpMethod } from "../request/types/common";
 
 const PostgrestReservedCharsRegexp = "[,()]";
@@ -360,8 +360,16 @@ export default class FilterBuilder<Table extends GenericTable> {
 			body: this.body,
 		});
 
-		if (response.data === undefined) {
-			error("Expected exactly one row but received zero or multiple rows");
+		if (response.data === undefined && !response.error) {
+			return {
+				data: undefined,
+				error: {
+					message: "Expected exactly one row but received zero or multiple rows",
+					details: "",
+					hint: "",
+					code: "PGRST116",
+				} as PostgrestError,
+			} as SupabaseFailResponse;
 		}
 
 		return response;
