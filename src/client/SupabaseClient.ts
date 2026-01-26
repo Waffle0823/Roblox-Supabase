@@ -1,5 +1,4 @@
 import QueryBuilder from "../query/QueryBuilder";
-import SupabaseRequest from "../request/SupabaseRequest";
 import { SupabaseClientOptions } from "./types/client";
 import { DatabaseWithoutInternals, GenericSchema } from "./types/common";
 
@@ -17,24 +16,25 @@ export default class SupabaseClient<
 			: string & keyof DatabaseWithoutInternals<Database>,
 	Schema extends GenericSchema = DatabaseWithoutInternals<Database>[SchemaName],
 > {
-	private rest: SupabaseRequest;
-	private options: SupabaseClientOptions<SchemaName>;
-
 	/**
 	 * Creates a new Supabase client instance
 	 * @param baseUrl The URL of your Supabase project
 	 * @param anonKey The anonymous API key for your Supabase project
 	 * @param options Optional configuration options
 	 */
-	constructor(baseUrl: string, anonKey: Secret, options?: SupabaseClientOptions<SchemaName>) {
-		assert(baseUrl !== "", "baseUrl cannot be empty");
+	constructor(
+		private baseUrl: string,
+		private anonKey: Secret,
+		private options: SupabaseClientOptions<SchemaName> = {},
+	) {
+		assert(this.baseUrl !== "", "baseUrl cannot be empty");
+		assert(this.anonKey, "anonKey is required");
 
-		if (baseUrl.sub(-1) !== "/") {
-			baseUrl += "/";
+		if (this.baseUrl.sub(-1) !== "/") {
+			this.baseUrl += "/";
 		}
 
-		this.rest = new SupabaseRequest(baseUrl + "rest/v1/", anonKey);
-		this.options = options ?? {};
+		this.baseUrl += "rest/v1/";
 	}
 
 	/**
@@ -51,6 +51,12 @@ export default class SupabaseClient<
 			error("Invalid relation name: relation cannot be empty");
 		}
 
-		return new QueryBuilder<Table>(this.rest, this.options.global?.headers, relation, this.options.db?.schema);
+		return new QueryBuilder<Table>(
+			this.baseUrl,
+			this.anonKey,
+			this.options.global?.headers,
+			relation,
+			this.options.db?.schema,
+		);
 	}
 }

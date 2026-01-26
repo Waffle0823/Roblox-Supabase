@@ -12,17 +12,21 @@ import { Columns, Count, Returning } from "./types/common";
 export default class QueryBuilder<Table extends GenericTable> {
 	/**
 	 * Creates a new QueryBuilder instance
-	 * @param rest The SupabaseRequest instance for making API calls
+	 * @param baseUrl The base URL for the API requests
+	 * @param anonKey The anonymous key for authentication
 	 * @param headers Optional headers to include with requests
 	 * @param relation The table or view name to query
 	 * @param schema Optional schema name
 	 */
 	constructor(
-		private rest: SupabaseRequest,
+		private baseUrl: string,
+		private anonKey: Secret,
 		private headers: Headers = {},
 		private relation: string,
 		private schema?: string,
-	) {}
+	) {
+		this.baseUrl += this.relation + "/";
+	}
 
 	/**
 	 * Performs a SELECT query to retrieve data from the table
