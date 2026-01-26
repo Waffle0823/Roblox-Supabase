@@ -11,14 +11,8 @@ export function addParam(path: string, param: string, value: string) {
 
 export function addPrefer(headers: Headers, key: string, value: string) {
 	if (headers["Prefer"] !== undefined && headers["Prefer"] !== "") {
-		return {
-			...headers,
-			Prefer: `${headers["Prefer"]}, ${key}=${value}`,
-		};
+		headers["Prefer"] += `, ${key}=${value}`;
 	} else {
-		return {
-			...headers,
-			Prefer: `${key}=${value}`,
-		};
+		headers["Prefer"] = `${key}=${value}`;
 	}
 }
