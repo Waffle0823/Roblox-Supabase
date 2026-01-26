@@ -49,7 +49,8 @@ To modify existing records, use the `update()` method combined with filters:
 ```typescript
 // Update a user's username
 async function updateUsername(userId: number, newUsername: string) {
-	const { data, error } = await supabase.from("users").update({ username: newUsername }).eq("id", userId).execute();
+	// By default, update() uses returning: "minimal" which doesn't return data
+	const { error } = await supabase.from("users").update({ username: newUsername }).eq("id", userId).execute();
 
 	if (error) {
 		warn(`Error updating user: ${error.message}`);
@@ -59,11 +60,12 @@ async function updateUsername(userId: number, newUsername: string) {
 	return true;
 }
 
-// Update multiple records matching a condition
+// Update multiple records matching a condition and return the data
 async function deactivateInactiveUsers(cutoffDate: string) {
+	// Use returning: "representation" to get data back
 	const { data, error } = await supabase
 		.from("users")
-		.update({ active: false })
+		.update({ active: false }, { returning: "representation" })
 		.lt("last_login", cutoffDate)
 		.execute();
 
@@ -72,7 +74,7 @@ async function deactivateInactiveUsers(cutoffDate: string) {
 		return 0;
 	}
 
-	return data.size();
+	return data ? data.size() : 0;
 }
 ```
 
@@ -83,9 +85,11 @@ The `upsert()` method allows you to insert records if they don't exist or update
 ```typescript
 // Upsert a user based on their ID
 async function upsertUser(userData: { id?: number; username: string }) {
+	// By default, upsert() uses returning: "minimal" which doesn't return data
+	// Use returning: "representation" to get the updated data back
 	const { data, error } = await supabase
 		.from("users")
-		.upsert(userData, { onConflict: "id", ignoreDuplicates: false })
+		.upsert(userData, { onConflict: "id", returning: "representation" })
 		.execute();
 
 	if (error) {
@@ -96,11 +100,11 @@ async function upsertUser(userData: { id?: number; username: string }) {
 	return data[0];
 }
 
-// Upsert multiple records
+// Upsert multiple records with default minimal return
 async function syncUserProfiles(profiles: UserProfile[]) {
-	const { data, error } = await supabase.from("user_profiles").upsert(profiles, { onConflict: "user_id" }).execute();
+	const { error } = await supabase.from("user_profiles").upsert(profiles, { onConflict: "user_id" }).execute();
 
-	return data;
+	return error ? false : true; // Just returns success status since data is minimal
 }
 ```
 
@@ -111,6 +115,7 @@ To remove records from your database, use the `delete()` method:
 ```typescript
 // Delete a specific user
 async function deleteUser(userId: number) {
+	// By default, delete() uses returning: "minimal" which doesn't return data
 	const { error } = await supabase.from("users").delete().eq("id", userId).execute();
 
 	if (error) {
@@ -121,16 +126,21 @@ async function deleteUser(userId: number) {
 	return true;
 }
 
-// Delete multiple records matching a condition
+// Delete multiple records and get the deleted data back
 async function cleanupOldLogs(olderThan: string) {
-	const { data, error } = await supabase.from("activity_logs").delete().lt("created_at", olderThan).execute();
+	// Use returning: "representation" to get the deleted data
+	const { data, error } = await supabase
+		.from("activity_logs")
+		.delete({ returning: "representation" })
+		.lt("created_at", olderThan)
+		.execute();
 
 	if (error) {
 		warn(`Error cleaning logs: ${error.message}`);
 		return 0;
 	}
 
-	return data.size(); // Number of deleted records
+	return data ? data.size() : 0; // Number of deleted records if representation is returned
 }
 ```
 
