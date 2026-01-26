@@ -157,7 +157,7 @@ const config: Config = {
 					],
 				},
 			],
-			copyright: `Copyright ${new Date().getFullYear()} Roblox-Supabase. Built with Docusaurus.`,
+			copyright: `${new Date().getFullYear()} Roblox-Supabase MIT LICENSE.`,
 		},
 		prism: {
 			theme: prismThemes.github,
