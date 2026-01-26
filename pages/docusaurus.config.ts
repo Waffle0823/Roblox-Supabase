@@ -60,6 +60,14 @@ const config: Config = {
 					customCss: "./src/css/custom.css",
 				},
 			} satisfies Preset.Options,
+			{
+				sitemap: {
+					changefreq: "weekly",
+					priority: 0.5,
+					ignorePatterns: ["/tags/**"],
+					filename: "sitemap.xml",
+				},
+			},
 		],
 	],
 
