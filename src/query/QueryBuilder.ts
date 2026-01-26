@@ -86,7 +86,7 @@ export default class QueryBuilder<Table extends GenericTable> {
 
 		const response = await rest.request<Table["Row"][]>({
 			method: "POST",
-			path: this.baseUrl,
+			path: "",
 			headers: this.headers,
 			body: data,
 		});
