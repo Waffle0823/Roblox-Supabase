@@ -24,3 +24,5 @@ export type FilterOperator =
 	| "wfts"
 	| "match"
 	| "imatch";
+
+export type SqlOperation = "SELECT" | "INSERT" | "UPSERT" | "DELETE" | "UPDATE";
