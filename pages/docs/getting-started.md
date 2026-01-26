@@ -41,8 +41,8 @@ Now you can create a Supabase client with your database types:
 
 ```typescript
 import { SupabaseClient } from "@rbxts/roblox-supabase";
-import { Database } from "./types/database.types";
 import { HttpService } from "@rbxts/services";
+import { Database } from "./types/database.types";
 
 // It's recommended to keep these in a secure configuration
 const supabaseUrl = "https://your-project-url.supabase.co";
