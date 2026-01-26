@@ -32,8 +32,8 @@ export default class QueryBuilder<Table extends GenericTable> {
 	 * Performs a SELECT query to retrieve data from the table
 	 * @param columns The columns to select or "*" for all columns
 	 * @param options Additional query options
-	 * @param options.head Whether to retrieve only metadata
 	 * @param options.count Count options
+	 * @param options.head Whether to retrieve only metadata
 	 * @returns A FilterBuilder instance for building the query
 	 */
 	public select(
@@ -67,6 +67,7 @@ export default class QueryBuilder<Table extends GenericTable> {
 	 * @param data The data to insert
 	 * @param options Insert options
 	 * @param options.returning How data should be returned, defaults to "representation"
+	 * @param options.missing How to handle missing data, defaults to "default"
 	 * @returns Promise resolving to the inserted rows
 	 */
 	public async insert(
@@ -100,8 +101,10 @@ export default class QueryBuilder<Table extends GenericTable> {
 	 * Inserts or updates records based on a conflict target
 	 * @param data The data to upsert
 	 * @param options Upsert options
+	 * @param options.returning How data should be returned, defaults to "minimal"
+	 * @param options.missing How to handle missing data, defaults to "default"
+	 * @param options.resolution How to handle duplicate data, defaults to "merge-duplicates"
 	 * @param options.onConflict Column to check for conflicts
-	 * @param options.ignoreDuplicates Whether to ignore duplicate inserts
 	 * @returns Promise resolving to the upserted rows
 	 */
 	public upsert(
@@ -140,6 +143,8 @@ export default class QueryBuilder<Table extends GenericTable> {
 	/**
 	 * Updates existing records in the table
 	 * @param data The data to update
+	 * @param options Update options
+	 * @param options.returning How data should be returned, defaults to "minimal"
 	 * @returns Promise resolving to the updated rows
 	 */
 	public update(
@@ -163,6 +168,8 @@ export default class QueryBuilder<Table extends GenericTable> {
 
 	/**
 	 * Deletes records from the table
+	 * @param options Delete options
+	 * @param options.returning How data should be returned, defaults to "minimal"
 	 * @returns Promise resolving to the deleted rows
 	 */
 	public delete({ returning = "minimal" }: { returning?: Returning } = {}): FilterBuilder<Table> {
