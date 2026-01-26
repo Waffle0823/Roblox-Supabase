@@ -179,15 +179,15 @@ export default class FilterBuilder<Table extends GenericTable> {
 		value: string | readonly Exclude<Table["Row"][ColumnName], unknown>[] | Record<string, unknown>,
 	): this {
 		if (typeIs(value, "string")) {
-			addParam(this.path, column, `cs.${value}`);
+			this.path = addParam(this.path, column, `cs.${value}`);
 		} else if (typeIs(value, "table") && isArray(value)) {
-			addParam(
+			this.path = addParam(
 				this.path,
 				column,
 				`cs.{${(value as readonly Exclude<Table["Row"][ColumnName], unknown>[]).join(",")}}`,
 			);
 		} else {
-			addParam(this.path, column, `cs.${HttpService.JSONEncode(value)}`);
+			this.path = addParam(this.path, column, `cs.${HttpService.JSONEncode(value)}`);
 		}
 		return this;
 	}
@@ -197,15 +197,15 @@ export default class FilterBuilder<Table extends GenericTable> {
 		value: string | readonly Exclude<Table["Row"][ColumnName], unknown>[] | Record<string, unknown>,
 	): this {
 		if (typeIs(value, "string")) {
-			addParam(this.path, column, `cd.${value}`);
+			this.path = addParam(this.path, column, `cd.${value}`);
 		} else if (typeIs(value, "table") && isArray(value)) {
-			addParam(
+			this.path = addParam(
 				this.path,
 				column,
 				`cd.{${(value as readonly Exclude<Table["Row"][ColumnName], unknown>[]).join(",")}}`,
 			);
 		} else {
-			addParam(this.path, column, `cd.${HttpService.JSONEncode(value)}`);
+			this.path = addParam(this.path, column, `cd.${HttpService.JSONEncode(value)}`);
 		}
 		return this;
 	}
