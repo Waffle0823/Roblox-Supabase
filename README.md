@@ -135,7 +135,7 @@ const supabase = new SupabaseClient("YOUR_SUPABASE_URL", HttpService.GetSecret("
 // Make a request
 const result = await supabase
   .from("players")
-  .select()
+  .select("*")
   .eq("id", player.UserId)
   .single();
 ```
