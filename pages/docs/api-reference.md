@@ -126,7 +126,7 @@ Performs a SELECT query to retrieve data from the table.
 
 **Returns:**
 
-- `FilterBuilder`: For building the query further
+- `FilterBuilder<Table>`: For building the query further
 
 **Example:**
 
@@ -195,7 +195,7 @@ Inserts or updates records based on a conflict target.
 
 **Returns:**
 
-- `FilterBuilder`: For adding conditions and executing
+- `FilterBuilder<Table>`: For adding conditions and executing
 
 **Example:**
 
@@ -232,7 +232,7 @@ Updates existing records in the table.
 
 **Returns:**
 
-- `FilterBuilder`: For adding conditions and executing
+- `FilterBuilder<Table>`: For adding conditions and executing
 
 **Example:**
 
@@ -256,7 +256,7 @@ Deletes records from the table.
 
 **Returns:**
 
-- `FilterBuilder`: For adding conditions and executing
+- `FilterBuilder<Table>`: For adding conditions and executing
 
 **Example:**
 
