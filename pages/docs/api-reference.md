@@ -131,7 +131,7 @@ Performs a SELECT query to retrieve data from the table.
 **Example:**
 
 ```typescript
-const query = supabase.from("users").select("id, username, email", { count: "exact" });
+const query = supabase.from("users").select(["id", "username", "email"], { count: "exact" });
 ```
 
 #### insert
