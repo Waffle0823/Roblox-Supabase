@@ -141,6 +141,7 @@ insert(
   data: Table["Insert"],
   options?: {
     returning?: Returning;
+	missing?: Missing;
   }
 ): Promise<SupabaseResponse<Table["Row"][]>>
 ```
@@ -151,6 +152,7 @@ Inserts new records into the table.
 
 - `data`: The data to insert
 - `options.returning`: How data should be returned (defaults to "representation")
+- `options.missing`: How to handle missing data (defaults to "default")
 
 **Returns:**
 
