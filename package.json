@@ -1,6 +1,6 @@
 {
   "name": "@rbxts/roblox-supabase",
-  "version": "0.1.0-alpha.1",
+  "version": "1.0.0",
   "description": "A type-safe PostgREST client for Supabase, designed for Roblox servers using roblox-ts",
   "main": "out/init.lua",
   "scripts": {
