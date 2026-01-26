@@ -133,12 +133,14 @@ const badQuery = await supabase
 // TypeScript ensures column exists and value type matches
 const query = supabase
 	.from("users")
+	.select("*")
 	.eq("id", 123) // Works because id is a number
 	.execute();
 
 // This would cause a type error
 const badQuery = supabase
 	.from("users")
+	.select("*")
 	.eq("id", "not-a-number") // TypeScript error
 	.execute();
 ```
