@@ -46,7 +46,7 @@ export default class SupabaseClient<
 	 */
 	public from<TableName extends string & keyof Schema["Tables"], Table extends Schema["Tables"][TableName]>(
 		relation: TableName,
-	) {
+	): QueryBuilder<Table> {
 		if (relation === undefined || relation === "") {
 			error("Invalid relation name: relation cannot be empty");
 		}
