@@ -2,7 +2,7 @@ import { Headers, GenericTable } from "../client/types/common";
 import FilterBuilder from "../filter/FilterBuilder";
 import SupabaseRequest from "../request/SupabaseRequest";
 import { SupabaseResponse } from "../request/types/client";
-import { addPrefer, setSchema } from "./Utils";
+import { addParam, addPrefer, setAcceptProfile, setContentProfile } from "./Utils";
 import { Columns, Count, Returning } from "./types/common";
 
 /**
@@ -44,14 +44,23 @@ export default class QueryBuilder<Table extends GenericTable> {
 		},
 	) {
 		if (options?.count) {
-			this.headers = addPrefer(this.headers, "count", options.count);
+			addPrefer(this.headers, "count", options.count);
 		}
 
 		if (options?.head) {
-			this.headers = addPrefer(this.headers, "head", tostring(options.head));
+			addPrefer(this.headers, "head", tostring(options.head));
 		}
 
-		return new FilterBuilder(this.rest, this.headers, this.relation, this.schema, columns);
+		setAcceptProfile(this.headers, this.schema);
+
+		if (columns !== undefined) {
+			const selectColumns = typeIs(columns, "table")
+				? (columns as (keyof Table["Row"])[]).join(",")
+				: tostring(columns);
+			this.baseUrl = addParam(this.baseUrl, "select", selectColumns);
+		}
+
+		return new FilterBuilder("SELECT", this.baseUrl, this.anonKey, this.headers);
 	}
 
 	/**
@@ -69,13 +78,15 @@ export default class QueryBuilder<Table extends GenericTable> {
 			returning?: Returning;
 		} = {},
 	): Promise<SupabaseResponse<Table["Row"][]>> {
-		const path = setSchema(this.relation, this.schema);
+		setContentProfile(this.headers, this.schema);
 
-		this.headers = addPrefer(this.headers, "return", returning);
+		addPrefer(this.headers, "return", tostring(returning));
 
-		const response = await this.rest.request<Table["Row"][]>({
+		const rest = new SupabaseRequest(this.baseUrl, this.anonKey);
+
+		const response = await rest.request<Table["Row"][]>({
 			method: "POST",
-			path,
+			path: this.baseUrl,
 			headers: this.headers,
 			body: data,
 		});
@@ -89,8 +100,6 @@ export default class QueryBuilder<Table extends GenericTable> {
 	 * @param options Upsert options
 	 * @param options.onConflict Column to check for conflicts
 	 * @param options.ignoreDuplicates Whether to ignore duplicate inserts
-	 * @param options.count Count options
-	 * @param options.defaultToNull Whether to default missing values to null
 	 * @returns Promise resolving to the upserted rows
 	 */
 	public upsert(
@@ -98,81 +107,41 @@ export default class QueryBuilder<Table extends GenericTable> {
 		{
 			onConflict,
 			ignoreDuplicates = false,
-			count,
-			defaultToNull = true,
 		}: {
 			onConflict?: string;
 			ignoreDuplicates?: boolean;
-			count?: Count;
-			defaultToNull?: boolean;
 		} = {},
 	): FilterBuilder<Table> {
 		const resolution = ignoreDuplicates ? "ignore-duplicates" : "merge-duplicates";
-		this.headers = addPrefer(this.headers, "resolution", resolution);
+		addPrefer(this.headers, "resolution", resolution);
 
-		if (count) {
-			this.headers = addPrefer(this.headers, "count", count);
-		}
+		setContentProfile(this.headers, this.schema);
 
-		if (!defaultToNull) {
-			this.headers = addPrefer(this.headers, "missing", "default");
-		}
-
-		let path = setSchema(this.relation, this.schema);
 		if (onConflict !== undefined) {
-			path += path.find("?")[0] !== undefined ? "&" : "?";
-			path += `on_conflict=${onConflict}`;
+			this.baseUrl = addParam(this.baseUrl, "on_conflict", tostring(onConflict));
 		}
 
-		return new FilterBuilder<Table>(
-			this.rest,
-			this.headers,
-			this.relation,
-			this.schema,
-			undefined,
-			"POST",
-			data,
-			path,
-		);
+		return new FilterBuilder<Table>("UPSERT", this.baseUrl, this.anonKey, this.headers, data);
 	}
 
 	/**
 	 * Updates existing records in the table
 	 * @param data The data to update
-	 * @param options Update options
-	 * @param options.count Count options
 	 * @returns Promise resolving to the updated rows
 	 */
-	public update(
-		data: Table["Update"],
-		{
-			count,
-		}: {
-			count?: Count;
-		} = {},
-	): FilterBuilder<Table> {
-		if (count) {
-			this.headers = addPrefer(this.headers, "count", count);
-		}
+	public update(data: Table["Update"]): FilterBuilder<Table> {
+		setContentProfile(this.headers, this.schema);
 
-		return new FilterBuilder<Table>(this.rest, this.headers, this.relation, this.schema, undefined, "PATCH", data);
+		return new FilterBuilder<Table>("UPDATE", this.baseUrl, this.anonKey, this.headers, data);
 	}
 
 	/**
 	 * Deletes records from the table
-	 * @param options Delete options
-	 * @param options.count Count options
 	 * @returns Promise resolving to the deleted rows
 	 */
-	public delete({
-		count,
-	}: {
-		count?: Count;
-	} = {}): FilterBuilder<Table> {
-		if (count) {
-			this.headers = addPrefer(this.headers, "count", count);
-		}
+	public delete(): FilterBuilder<Table> {
+		setContentProfile(this.headers, this.schema);
 
-		return new FilterBuilder<Table>(this.rest, this.headers, this.relation, this.schema, undefined, "DELETE");
+		return new FilterBuilder<Table>("DELETE", this.baseUrl, this.anonKey, this.headers);
 	}
 }
