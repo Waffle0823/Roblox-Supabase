@@ -18,8 +18,11 @@ function HomepageHeader() {
 				</Heading>
 				<p className="hero__subtitle">{siteConfig.tagline}</p>
 				<div className={styles.buttons}>
-					<Link className="button button--secondary button--lg" to="/docs/intro">
+					<Link className="button button--secondary button--lg" to="/docs/intro" style={{ marginRight: '10px' }}>
 						Get Started
+					</Link>
+					<Link className="button button--primary button--lg" to="/docs/api-reference">
+						API Reference
 					</Link>
 				</div>
 			</div>
@@ -30,7 +33,7 @@ function HomepageHeader() {
 export default function Home(): ReactNode {
 	const { siteConfig } = useDocusaurusContext();
 	return (
-		<Layout title={`Hello from ${siteConfig.title}`} description="Description will go into a meta tag in <head />">
+		<Layout title={`${siteConfig.title} - TypeScript Client for Supabase in Roblox`} description="A type-safe PostgREST client for Supabase, designed for Roblox servers using roblox-ts">
 			<HomepageHeader />
 			<main>
 				<HomepageFeatures />

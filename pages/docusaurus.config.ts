@@ -21,7 +21,6 @@ const config: Config = {
 	baseUrl: "/Roblox-Supabase/",
 
 	// GitHub pages deployment config.
-	// If you aren't using GitHub pages, you don't need these.
 	organizationName: "Waffle0823", // Usually your GitHub org/user name.
 	projectName: "Roblox-Supabase", // Usually your repo name.
 
@@ -41,10 +40,8 @@ const config: Config = {
 			{
 				docs: {
 					sidebarPath: "./sidebars.ts",
-					// Please change this to your repo.
-					// Remove this to remove the "edit this page" links.
-					editUrl:
-						"https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
+					// Edit URL for your repo
+					editUrl: "https://github.com/Waffle0823/Roblox-Supabase/edit/main/pages/",
 				},
 				blog: {
 					showReadingTime: true,
@@ -52,10 +49,8 @@ const config: Config = {
 						type: ["rss", "atom"],
 						xslt: true,
 					},
-					// Please change this to your repo.
-					// Remove this to remove the "edit this page" links.
-					editUrl:
-						"https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
+					// Edit URL for your repo
+					editUrl: "https://github.com/Waffle0823/Roblox-Supabase/edit/main/pages/",
 					// Useful options to enforce blogging best practices
 					onInlineTags: "warn",
 					onInlineAuthors: "warn",
@@ -85,7 +80,17 @@ const config: Config = {
 					type: "docSidebar",
 					sidebarId: "tutorialSidebar",
 					position: "left",
-					label: "Tutorial",
+					label: "Documentation",
+				},
+				{
+					to: "/docs/api-reference",
+					label: "API Reference",
+					position: "left",
+				},
+				{
+					to: "/docs/tutorial-examples",
+					label: "Examples",
+					position: "left",
 				},
 				{ to: "/blog", label: "Blog", position: "left" },
 				{
@@ -99,28 +104,32 @@ const config: Config = {
 			style: "dark",
 			links: [
 				{
-					title: "Docs",
+					title: "Documentation",
 					items: [
 						{
-							label: "Tutorial",
-							to: "/docs/intro",
+							label: "Getting Started",
+							to: "/docs/getting-started",
+						},
+						{
+							label: "API Reference",
+							to: "/docs/api-reference",
+						},
+						{
+							label: "Examples",
+							to: "/docs/tutorial-examples",
 						},
 					],
 				},
 				{
-					title: "Community",
+					title: "Related",
 					items: [
 						{
-							label: "Stack Overflow",
-							href: "https://stackoverflow.com/questions/tagged/docusaurus",
+							label: "Supabase",
+							href: "https://supabase.com",
 						},
 						{
-							label: "Discord",
-							href: "https://discordapp.com/invite/docusaurus",
-						},
-						{
-							label: "X",
-							href: "https://x.com/docusaurus",
+							label: "roblox-ts",
+							href: "https://roblox-ts.com",
 						},
 					],
 				},
@@ -133,12 +142,16 @@ const config: Config = {
 						},
 						{
 							label: "GitHub",
-							href: "https://github.com/facebook/docusaurus",
+							href: "https://github.com/Waffle0823/Roblox-Supabase",
+						},
+						{
+							label: "Report Issues",
+							href: "https://github.com/Waffle0823/Roblox-Supabase/issues",
 						},
 					],
 				},
 			],
-			copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+			copyright: `Copyright ${new Date().getFullYear()} Roblox-Supabase. Built with Docusaurus.`,
 		},
 		prism: {
 			theme: prismThemes.github,

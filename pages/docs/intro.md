@@ -2,46 +2,58 @@
 sidebar_position: 1
 ---
 
-# Tutorial Intro
+# Introduction
 
-Let's discover **Docusaurus in less than 5 minutes**.
+Welcome to the **Roblox-Supabase** documentation. This library provides a type-safe PostgREST client for [Supabase](https://supabase.com/), specifically designed for Roblox servers using [roblox-ts](https://roblox-ts.com/).
 
-## Getting Started
+## Overview
 
-Get started by **creating a new site**.
+Roblox-Supabase allows you to interact with your Supabase database from a Roblox server environment with full TypeScript support. It provides a clean, intuitive API for performing database operations while maintaining type safety.
 
-Or **try Docusaurus immediately** with **[docusaurus.new](https://docusaurus.new)**.
+## Features
 
-### What you'll need
+- **Type-Safe**: Full TypeScript support for tables, columns, and query results
+- **Familiar API**: Similar to the official Supabase JS client
+- **Comprehensive Query Support**: Select, insert, update, delete with filtering
+- **Roblox-Ready**: Designed specifically for the Roblox environment
 
-- [Node.js](https://nodejs.org/en/download/) version 20.0 or above:
-  - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
+## Requirements
 
-## Generate a new site
+- [Roblox Studio](https://www.roblox.com/create) with a game project
+- [roblox-ts](https://roblox-ts.com/) set up in your project
+- A [Supabase](https://supabase.com/) project with database tables
 
-Generate a new Docusaurus site using the **classic template**.
+## Installation
 
-The classic template will automatically be added to your project after you run the command:
-
-```bash
-npm init docusaurus@latest my-website classic
-```
-
-You can type this command into Command Prompt, Powershell, Terminal, or any other integrated terminal of your code editor.
-
-The command also installs all necessary dependencies you need to run Docusaurus.
-
-## Start your site
-
-Run the development server:
+Add the package to your roblox-ts project:
 
 ```bash
-cd my-website
-npm run start
+npm install @rbxts/roblox-supabase
 ```
 
-The `cd` command changes the directory you're working with. In order to work with your newly created Docusaurus site, you'll need to navigate the terminal there.
+## Quick Start
 
-The `npm run start` command builds your website locally and serves it through a development server, ready for you to view at http://localhost:3000/.
+Here's a basic example of using Roblox-Supabase to connect to your database and query data:
 
-Open `docs/intro.md` (this page) and edit some lines: the site **reloads automatically** and displays your changes.
+```typescript
+import { SupabaseClient } from "@rbxts/roblox-supabase";
+import { HttpService } from "@rbxts/services";
+
+// Initialize the client
+const supabase = new SupabaseClient("https://your-project-url.supabase.co", HttpService.GetSecret("SUPABASE_ANON_KEY"));
+
+// Query data
+async function getUsers() {
+	const { data, error } = await supabase.from("users").select("*").execute();
+
+	if (error) {
+		warn(`Error fetching users: ${error.message}`);
+		return;
+	}
+
+	print(`Found ${data.size()} users`);
+	return data;
+}
+```
+
+The following pages will guide you through setting up and using Roblox-Supabase in your Roblox projects.
