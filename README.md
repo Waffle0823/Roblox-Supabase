@@ -167,6 +167,7 @@ _More examples and detailed documentation coming soon._
 ## Roadmap
 
 - [x] Basic Supabase client implementation
+- [ ] Convert to Ambient Declarations
 - [ ] Request functionality
 - [ ] Complete Supabase API coverage
 - [ ] Authentication methods
