@@ -52,7 +52,7 @@ export default class SupabaseRequest {
 			return {
 				status: response.StatusCode,
 				statusText: response.StatusMessage,
-				error: undefined,
+				err: undefined,
 				data: parsedBody as T,
 				count: tonumber(response.Headers["content-range"].split("/")[1]),
 			};
@@ -60,7 +60,7 @@ export default class SupabaseRequest {
 			return {
 				status: response.StatusCode,
 				statusText: response.StatusMessage,
-				error: parsedBody as PostgrestError,
+				err: parsedBody as PostgrestError,
 				data: undefined,
 				count: undefined,
 			};

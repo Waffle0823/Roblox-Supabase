@@ -343,10 +343,10 @@ export default class FilterBuilder<Table extends GenericTable> {
 			body: this.body,
 		});
 
-		if (response.data === undefined && !response.error) {
+		if (response.data === undefined && !response.err) {
 			return {
 				data: undefined,
-				error: {
+				err: {
 					message: "Expected exactly one row but received zero or multiple rows",
 					details: "",
 					hint: "",

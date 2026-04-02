@@ -36,7 +36,7 @@ export interface SupabaseResponseBase {
  */
 export interface SupabaseSuccessResponse<T> extends SupabaseResponseBase {
 	/** Undefined when the request was successful */
-	error: undefined;
+	err: undefined;
 	/** The data returned by the API */
 	data: T;
 	/** The count of records affected or returned, if requested */
@@ -49,7 +49,7 @@ export interface SupabaseSuccessResponse<T> extends SupabaseResponseBase {
  */
 export interface SupabaseFailResponse extends SupabaseResponseBase {
 	/** The error object containing details about the failure */
-	error: PostgrestError;
+	err: PostgrestError;
 	/** Undefined when the request failed */
 	data: undefined;
 	/** Undefined when the request failed */
