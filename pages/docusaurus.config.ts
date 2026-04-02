@@ -19,6 +19,7 @@ const config: Config = {
 	// Set the /<baseUrl>/ pathname under which your site is served
 	// For GitHub pages deployment, it is often '/<projectName>/'
 	baseUrl: "/Roblox-Supabase/",
+	trailingSlash: false,
 
 	// GitHub pages deployment config.
 	organizationName: "Waffle0823", // Usually your GitHub org/user name.

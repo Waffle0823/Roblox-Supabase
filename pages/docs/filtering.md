@@ -173,4 +173,4 @@ const { data } = await supabase
 
 ## Next Steps
 
-Now that you understand filtering, learn about [TypeScript Integration](typescript-integration) to get the most out of type safety with Roblox-Supabase.
+Now that you understand filtering, learn about [TypeScript Integration](typescript-integration/) to get the most out of type safety with Roblox-Supabase.

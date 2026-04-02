@@ -173,4 +173,4 @@ However, if you need to perform multiple related operations, you may need to imp
 
 ## Next Steps
 
-Now that you understand how to modify data, learn about [Advanced Filtering](filtering) to create more complex queries.
+Now that you understand how to modify data, learn about [Advanced Filtering](filtering/) to create more complex queries.

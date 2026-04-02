@@ -127,4 +127,4 @@ When working with Roblox servers:
 3. **Cache frequently accessed data**: Don't repeatedly fetch data that rarely changes.
 4. **Consider rate limits**: Supabase may have rate limits depending on your plan.
 
-In the next section, you'll learn how to [modify data](modifying-data) in your database using insert, update, and delete operations.
+In the next section, you'll learn how to [modify data](modifying-data/) in your database using insert, update, and delete operations.

@@ -67,6 +67,6 @@ When using Roblox-Supabase:
 
 Now that you have set up Roblox-Supabase, you can:
 
-- Learn about [Querying Data](querying-data)
-- See how to [Insert, Update, and Delete Data](modifying-data)
-- Explore [Advanced Filtering](filtering)
+- Learn about [Querying Data](querying-data/)
+- See how to [Insert, Update, and Delete Data](modifying-data/)
+- Explore [Advanced Filtering](filtering/)

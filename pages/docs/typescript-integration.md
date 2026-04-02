@@ -211,4 +211,4 @@ Supabase offers type generation tools, but they need to be adapted for the Roblo
 
 ## Next Steps
 
-Now that you understand how to leverage TypeScript with Roblox-Supabase, check out the [API Reference](api-reference) for a complete overview of available methods.
+Now that you understand how to leverage TypeScript with Roblox-Supabase, check out the [API Reference](api-reference/) for a complete overview of available methods.
