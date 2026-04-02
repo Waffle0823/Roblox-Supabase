@@ -173,8 +173,8 @@ _More examples and detailed documentation coming soon._
 - [x] Authentication methods
 - [ ] Realtime subscriptions
 - [ ] Storage functionality
-- [ ] Comprehensive documentation
-- [ ] Code examples
+- [x] Comprehensive documentation
+- [x] Code examples
 
 See the [open issues](https://github.com/Waffle0823/Roblox-Supabase/issues) for a full list of proposed features (and known issues).
 
