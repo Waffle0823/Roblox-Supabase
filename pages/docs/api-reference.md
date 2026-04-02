@@ -15,7 +15,7 @@ The main client for interacting with your Supabase database.
 ```typescript
 new SupabaseClient<Database, SchemaName, Schema>(
   baseUrl: string,
-  anonKey: Secret,
+  anonKey: Secret | string,
   options?: SupabaseClientOptions<SchemaName>
 )
 ```
@@ -87,7 +87,7 @@ Builds and executes database queries against a Supabase table.
 ```typescript
 constructor(
   baseUrl: string,
-  anonKey: Secret,
+  anonKey: Secret | string,
   headers: Headers = {},
   relation: string,
   schema?: string
@@ -161,7 +161,7 @@ Inserts new records into the table.
 **Example:**
 
 ```typescript
-const { data, error } = await supabase
+const { data, err } = await supabase
 	.from("users")
 	.insert({
 		username: "newuser",
@@ -200,7 +200,7 @@ Inserts or updates records based on a conflict target.
 **Example:**
 
 ```typescript
-const { data, error } = await supabase
+const { data, err } = await supabase
 	.from("users")
 	.upsert(
 		{
@@ -237,7 +237,7 @@ Updates existing records in the table.
 **Example:**
 
 ```typescript
-const { data, error } = await supabase.from("users").update({ active: true }).eq("id", 123).execute();
+const { data, err } = await supabase.from("users").update({ active: true }).eq("id", 123).execute();
 ```
 
 #### delete
@@ -261,7 +261,7 @@ Deletes records from the table.
 **Example:**
 
 ```typescript
-const { data, error } = await supabase.from("users").delete().eq("id", 123).execute();
+const { data, err } = await supabase.from("users").delete().eq("id", 123).execute();
 ```
 
 ## FilterBuilder
@@ -305,7 +305,7 @@ Executes the query and returns multiple rows.
 **Example:**
 
 ```typescript
-const { data, error } = await supabase.from("users").select("*").eq("active", true).execute();
+const { data, err } = await supabase.from("users").select("*").eq("active", true).execute();
 ```
 
 #### single
@@ -324,7 +324,7 @@ Executes the query and expects exactly one result.
 **Example:**
 
 ```typescript
-const { data, error } = await supabase.from("users").select("*").eq("id", 123).single();
+const { data, err } = await supabase.from("users").select("*").eq("id", 123).single();
 ```
 
 #### maybeSingle
@@ -344,7 +344,7 @@ Executes the query and returns at most one result.
 **Example:**
 
 ```typescript
-const { data, error } = await supabase.from("users").select("*").eq("email", "user@example.com").maybeSingle();
+const { data, err } = await supabase.from("users").select("*").eq("email", "user@example.com").maybeSingle();
 ```
 
 ## Response Types
@@ -354,7 +354,7 @@ const { data, error } = await supabase.from("users").select("*").eq("email", "us
 ```typescript
 interface SupabaseResponse<T> {
 	data: T | undefined;
-	error:
+	err:
 		| {
 				message: string;
 				details: string;
@@ -372,6 +372,6 @@ The response object returned by all query methods.
 **Properties:**
 
 - `data`: The query result data (if successful)
-- `error`: Error information (if the query failed)
+- `err`: Error information (if the query failed)
 - `status`: HTTP status code
 - `statusText`: Status description

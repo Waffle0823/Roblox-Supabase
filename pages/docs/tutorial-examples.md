@@ -80,10 +80,10 @@ export class PlayerDataManager {
 
 		try {
 			// Try to load existing data
-			const { data, error } = await supabase.from("player_data").select("*").eq("user_id", userId).maybeSingle();
+			const { data, err } = await supabase.from("player_data").select("*").eq("user_id", userId).maybeSingle();
 
-			if (error) {
-				warn(`Error loading data for ${player.Name}: ${error.message}`);
+			if (err) {
+				warn(`Error loading data for ${player.Name}: ${err.message}`);
 				return;
 			}
 
@@ -100,7 +100,7 @@ export class PlayerDataManager {
 					last_save: new Date().toISOString(),
 				};
 
-				const { data: createdData, error: createError } = await supabase.from("player_data").insert(newData);
+				const { data: createdData, err: createError } = await supabase.from("player_data").insert(newData);
 
 				if (createError) {
 					warn(`Error creating data: ${createError.message}`);
@@ -125,7 +125,7 @@ export class PlayerDataManager {
 		}
 
 		try {
-			const { error } = await supabase
+			const { err } = await supabase
 				.from("player_data")
 				.update({
 					...data,
@@ -134,8 +134,8 @@ export class PlayerDataManager {
 				.eq("user_id", userId)
 				.execute();
 
-			if (error) {
-				warn(`Error saving data for ${player.Name}: ${error.message}`);
+			if (err) {
+				warn(`Error saving data for ${player.Name}: ${err.message}`);
 			} else {
 				print(`Saved data for ${player.Name}`);
 			}
@@ -275,7 +275,7 @@ export class LeaderboardManager {
 	async updateScore(userId: string, username: string, score: number): Promise<boolean> {
 		try {
 			// Use upsert to either insert new score or update existing
-			const { error } = await supabase
+			const { err } = await supabase
 				.from("leaderboard")
 				.upsert(
 					{
@@ -288,8 +288,8 @@ export class LeaderboardManager {
 				)
 				.execute();
 
-			if (error) {
-				warn(`Error updating leaderboard: ${error.message}`);
+			if (err) {
+				warn(`Error updating leaderboard: ${err.message}`);
 				return false;
 			}
 
@@ -303,15 +303,15 @@ export class LeaderboardManager {
 	// Get top scores
 	async getTopScores(limit: number = 10): Promise<LeaderboardEntry[]> {
 		try {
-			const { data, error } = await supabase
+			const { data, err } = await supabase
 				.from("leaderboard")
 				.select("*")
 				.order("score", { ascending: false })
 				.limit(limit)
 				.execute();
 
-			if (error) {
-				warn(`Error getting top scores: ${error.message}`);
+			if (err) {
+				warn(`Error getting top scores: ${err.message}`);
 				return [];
 			}
 
@@ -326,7 +326,7 @@ export class LeaderboardManager {
 	async getPlayerRank(userId: string): Promise<number | undefined> {
 		try {
 			// Get player's score first
-			const { data: playerData, error: playerError } = await supabase
+			const { data: playerData, err: playerError } = await supabase
 				.from("leaderboard")
 				.select("score")
 				.eq("user_id", userId)
@@ -338,7 +338,7 @@ export class LeaderboardManager {
 			}
 
 			// Count players with higher scores
-			const { data: rankData, error: rankError } = await supabase
+			const { data: rankData, err: rankError } = await supabase
 				.from("leaderboard")
 				.select("id", { count: "exact" })
 				.gt("score", playerData.score)
@@ -416,10 +416,10 @@ export class ConfigManager {
 	// Load all configurations
 	async loadAllConfigs() {
 		try {
-			const { data, error } = await supabase.from("game_config").select("*").execute();
+			const { data, err } = await supabase.from("game_config").select("*").execute();
 
-			if (error) {
-				warn(`Error loading configs: ${error.message}`);
+			if (err) {
+				warn(`Error loading configs: ${err.message}`);
 				return;
 			}
 
@@ -483,7 +483,7 @@ export class ConfigManager {
 				stringValue = tostring(value);
 			}
 
-			const { error } = await supabase
+			const { err } = await supabase
 				.from("game_config")
 				.upsert(
 					{
@@ -495,8 +495,8 @@ export class ConfigManager {
 				)
 				.execute();
 
-			if (error) {
-				warn(`Error updating config: ${error.message}`);
+			if (err) {
+				warn(`Error updating config: ${err.message}`);
 				return false;
 			}
 

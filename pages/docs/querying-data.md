@@ -16,10 +16,10 @@ import { supabase } from "./supabaseClient";
 
 // Select all columns from the users table
 async function getAllUsers() {
-	const { data, error } = await supabase.from("users").select("*").execute();
+	const { data, err } = await supabase.from("users").select("*").execute();
 
-	if (error) {
-		warn(`Error: ${error.message}`);
+	if (err) {
+		warn(`Error: ${err.message}`);
 		return [];
 	}
 
@@ -28,7 +28,7 @@ async function getAllUsers() {
 
 // Select specific columns
 async function getUserNames() {
-	const { data, error } = await supabase.from("users").select("id, username").execute();
+	const { data, err } = await supabase.from("users").select("id, username").execute();
 
 	return data;
 }
@@ -41,10 +41,10 @@ When you expect only one result, use `single()` or `maybeSingle()`:
 ```typescript
 // Get exactly one user - will error if not exactly one result
 async function getUser(userId: number) {
-	const { data, error } = await supabase.from("users").select("*").eq("id", userId).single();
+	const { data, err } = await supabase.from("users").select("*").eq("id", userId).single();
 
-	if (error) {
-		warn(`Error getting user: ${error.message}`);
+	if (err) {
+		warn(`Error getting user: ${err.message}`);
 		return undefined;
 	}
 
@@ -53,7 +53,7 @@ async function getUser(userId: number) {
 
 // Get at most one user - won't error if no results
 async function findUser(username: string) {
-	const { data, error } = await supabase.from("users").select("*").eq("username", username).maybeSingle();
+	const { data, err } = await supabase.from("users").select("*").eq("username", username).maybeSingle();
 
 	return data; // Will be undefined if no user found
 }
@@ -66,7 +66,7 @@ All query methods return a `SupabaseResponse` object that contains:
 ```typescript
 {
   data: T | undefined; // The query result data
-  error: {
+  err: {
     message: string;
     details: string;
     hint: string;
@@ -80,10 +80,10 @@ All query methods return a `SupabaseResponse` object that contains:
 Always check for errors before using the data:
 
 ```typescript
-const { data, error } = await supabase.from("scores").select("*").execute();
+const { data, err } = await supabase.from("scores").select("*").execute();
 
-if (error) {
-	warn(`Failed to get scores: ${error.message}`);
+if (err) {
+	warn(`Failed to get scores: ${err.message}`);
 	// Handle the error appropriately
 	return;
 }

@@ -15,13 +15,13 @@ import { supabase } from "./supabaseClient";
 
 // Insert a single record
 async function createUser(username: string) {
-	const { data, error } = await supabase.from("users").insert({
+	const { data, err } = await supabase.from("users").insert({
 		username: username,
 		created_at: new Date().toISOString(),
 	});
 
-	if (error) {
-		warn(`Error creating user: ${error.message}`);
+	if (err) {
+		warn(`Error creating user: ${err.message}`);
 		return;
 	}
 
@@ -36,7 +36,7 @@ async function createUsers(usernames: string[]) {
 		created_at: new Date().toISOString(),
 	}));
 
-	const { data, error } = await supabase.from("users").insert(users);
+	const { data, err } = await supabase.from("users").insert(users);
 
 	return data;
 }
@@ -50,10 +50,10 @@ To modify existing records, use the `update()` method combined with filters:
 // Update a user's username
 async function updateUsername(userId: number, newUsername: string) {
 	// By default, update() uses returning: "minimal" which doesn't return data
-	const { error } = await supabase.from("users").update({ username: newUsername }).eq("id", userId).execute();
+	const { err } = await supabase.from("users").update({ username: newUsername }).eq("id", userId).execute();
 
-	if (error) {
-		warn(`Error updating user: ${error.message}`);
+	if (err) {
+		warn(`Error updating user: ${err.message}`);
 		return false;
 	}
 
@@ -63,14 +63,14 @@ async function updateUsername(userId: number, newUsername: string) {
 // Update multiple records matching a condition and return the data
 async function deactivateInactiveUsers(cutoffDate: string) {
 	// Use returning: "representation" to get data back
-	const { data, error } = await supabase
+	const { data, err } = await supabase
 		.from("users")
 		.update({ active: false }, { returning: "representation" })
 		.lt("last_login", cutoffDate)
 		.execute();
 
-	if (error) {
-		warn(`Error deactivating users: ${error.message}`);
+	if (err) {
+		warn(`Error deactivating users: ${err.message}`);
 		return 0;
 	}
 
@@ -87,13 +87,13 @@ The `upsert()` method allows you to insert records if they don't exist or update
 async function upsertUser(userData: { id?: number; username: string }) {
 	// By default, upsert() uses returning: "minimal" which doesn't return data
 	// Use returning: "representation" to get the updated data back
-	const { data, error } = await supabase
+	const { data, err } = await supabase
 		.from("users")
 		.upsert(userData, { onConflict: "id", returning: "representation" })
 		.execute();
 
-	if (error) {
-		warn(`Error upserting user: ${error.message}`);
+	if (err) {
+		warn(`Error upserting user: ${err.message}`);
 		return;
 	}
 
@@ -102,9 +102,9 @@ async function upsertUser(userData: { id?: number; username: string }) {
 
 // Upsert multiple records with default minimal return
 async function syncUserProfiles(profiles: UserProfile[]) {
-	const { error } = await supabase.from("user_profiles").upsert(profiles, { onConflict: "user_id" }).execute();
+	const { err } = await supabase.from("user_profiles").upsert(profiles, { onConflict: "user_id" }).execute();
 
-	return error ? false : true; // Just returns success status since data is minimal
+	return err ? false : true; // Just returns success status since data is minimal
 }
 ```
 
@@ -116,10 +116,10 @@ To remove records from your database, use the `delete()` method:
 // Delete a specific user
 async function deleteUser(userId: number) {
 	// By default, delete() uses returning: "minimal" which doesn't return data
-	const { error } = await supabase.from("users").delete().eq("id", userId).execute();
+	const { err } = await supabase.from("users").delete().eq("id", userId).execute();
 
-	if (error) {
-		warn(`Error deleting user: ${error.message}`);
+	if (err) {
+		warn(`Error deleting user: ${err.message}`);
 		return false;
 	}
 
@@ -129,14 +129,14 @@ async function deleteUser(userId: number) {
 // Delete multiple records and get the deleted data back
 async function cleanupOldLogs(olderThan: string) {
 	// Use returning: "representation" to get the deleted data
-	const { data, error } = await supabase
+	const { data, err } = await supabase
 		.from("activity_logs")
 		.delete({ returning: "representation" })
 		.lt("created_at", olderThan)
 		.execute();
 
-	if (error) {
-		warn(`Error cleaning logs: ${error.message}`);
+	if (err) {
+		warn(`Error cleaning logs: ${err.message}`);
 		return 0;
 	}
 
@@ -149,15 +149,15 @@ async function cleanupOldLogs(olderThan: string) {
 Always check for errors when modifying data:
 
 ```typescript
-const { data, error } = await supabase.from("game_scores").insert({ player_id: playerId, score: newScore }).execute();
+const { data, err } = await supabase.from("game_scores").insert({ player_id: playerId, score: newScore }).execute();
 
-if (error) {
-	if (error.code === "23505") {
+if (err) {
+	if (err.code === "23505") {
 		// Handle unique constraint violation
 		warn("This player already has a score recorded");
 	} else {
 		// Handle other errors
-		warn(`Database error: ${error.message}`);
+		warn(`Database error: ${err.message}`);
 	}
 	return;
 }

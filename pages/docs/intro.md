@@ -44,10 +44,10 @@ const supabase = new SupabaseClient("https://your-project-url.supabase.co", Http
 
 // Query data
 async function getUsers() {
-	const { data, error } = await supabase.from("users").select("*").execute();
+	const { data, err } = await supabase.from("users").select("*").execute();
 
-	if (error) {
-		warn(`Error fetching users: ${error.message}`);
+	if (err) {
+		warn(`Error fetching users: ${err.message}`);
 		return;
 	}
 
