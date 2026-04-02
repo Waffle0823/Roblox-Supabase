@@ -1,11 +1,12 @@
 name: Deploy Pages
 
 on:
-    push:
-        branches: [main]
-        paths:
-            - "pages/**"
-            - ".github/workflows/pages.yml"
+  workflow_dispatch:
+    inputs:
+      target_branch:
+        description: 'Branch to publish'
+        required: true
+        default: 'main'
 
 permissions:
     contents: read
