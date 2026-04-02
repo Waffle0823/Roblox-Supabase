@@ -18,7 +18,7 @@ export default class FilterBuilder<Table extends GenericTable> {
 
 	constructor(
 		private baseUrl: string,
-		private anonKey: Secret,
+		private anonKey: Secret | string,
 		options: {
 			method: HttpMethod;
 			body?: unknown;

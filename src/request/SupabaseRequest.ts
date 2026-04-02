@@ -15,8 +15,8 @@ export default class SupabaseRequest {
 	 */
 	constructor(
 		private baseUrl: string,
-		private anonKey: Secret,
-	) {}
+		private anonKey: Secret | string,
+	) { }
 
 	/**
 	 * Sends an HTTP request to the Supabase API

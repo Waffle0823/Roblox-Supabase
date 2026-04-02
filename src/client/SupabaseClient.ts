@@ -11,9 +11,9 @@ import { DatabaseWithoutInternals, GenericSchema } from "./types/common";
 export default class SupabaseClient<
 	Database extends Record<string, unknown>,
 	SchemaName extends string & keyof DatabaseWithoutInternals<Database> =
-		"public" extends keyof DatabaseWithoutInternals<Database>
-			? "public"
-			: string & keyof DatabaseWithoutInternals<Database>,
+	"public" extends keyof DatabaseWithoutInternals<Database>
+	? "public"
+	: string & keyof DatabaseWithoutInternals<Database>,
 	Schema extends GenericSchema = DatabaseWithoutInternals<Database>[SchemaName],
 > {
 	/**
@@ -24,7 +24,7 @@ export default class SupabaseClient<
 	 */
 	constructor(
 		private baseUrl: string,
-		private anonKey: Secret,
+		private anonKey: Secret | string,
 		private options: SupabaseClientOptions<SchemaName> = {},
 	) {
 		assert(this.baseUrl !== "", "baseUrl cannot be empty");

@@ -20,7 +20,7 @@ export default class QueryBuilder<Table extends GenericTable> {
 	 */
 	constructor(
 		private baseUrl: string,
-		private anonKey: Secret,
+		private anonKey: Secret | string,
 		private headers: Headers = {},
 		private relation: string,
 		private schema?: string,

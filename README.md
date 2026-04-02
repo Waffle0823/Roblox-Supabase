@@ -170,7 +170,7 @@ _More examples and detailed documentation coming soon._
 - [ ] Convert to Ambient Declarations
 - [ ] Request functionality
 - [ ] Complete Supabase API coverage
-- [ ] Authentication methods
+- [x] Authentication methods
 - [ ] Realtime subscriptions
 - [ ] Storage functionality
 - [ ] Comprehensive documentation
